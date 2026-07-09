@@ -240,7 +240,7 @@ const STAGES=[
  ["2-10","設計審查會議紀錄","ok","20251226、20260108、20260114"],
  ["2-11","設計變更紀錄表","gap","V3→V4→V5 差異未列表"],
  ["2-12","規範書(Specification)","gap","僅零星引用 ASME B31.3、ISO 5167、ASHRAE"]],
- extra:[["設計需求書(本案回填重點)","<div class='tblwrap'><table><tr><th>欄位</th><th>本案內容</th></tr><tr><td>供電條件</td><td>廠內 220V 3φ 60Hz;盤內 220V 單相→10A 斷路器+紅色插座隔離</td></tr><tr><td>主機規格</td><td>堃霖 KLFW-160DV-1GDG 雙壓縮機,<b>左出水</b>(2025-11-27 定案)</td></tr><tr><td>監控平台</td><td>泓格 iP-8841、I-87051W、PM-4324A、NS-205A/208A/216、GW-100-LRS</td></tr><tr><td>感測精度</td><td>RTD 0.1°C / DIN 1/3;差壓流量計依 ISO 5167</td></tr><tr><td>抗干擾</td><td>電控盤雙電源;變頻器走乙太網路;電表 RS-485 串接單獨拉線;流量計獨立 RS-485</td></tr><tr><td>既有限制</td><td>一樓流量僅 1/4、FC 二通閥無自控、共通管容量 3%、水塔高差 <1m</td></tr></table></div>"],
+ extra:[["設計需求書(本案回填重點)","<div class='tblwrap'><table><tr><th>欄位</th><th>本案內容</th></tr><tr><td>供電條件</td><td>廠內 220V 3φ 60Hz;盤內 220V 單相→10A 斷路器+紅色插座隔離</td></tr><tr><td>主機規格</td><td>堃霖 KLFW-160DV-1GDG 雙壓縮機,<b>左出水</b>(2025-11-27 定案)</td></tr><tr><td>監控平台</td><td>泓格 BRK-2841M、iP-8841-MTCP、I-87051W、PM-4324A、NS-205A/208A/216、GW-100-LRS</td></tr><tr><td>感測精度</td><td>RTD 0.1°C / DIN 1/3;差壓流量計依 ISO 5167</td></tr><tr><td>抗干擾</td><td>電控盤雙電源;變頻器走乙太網路;電表 RS-485 串接單獨拉線;流量計獨立 RS-485</td></tr><tr><td>既有限制</td><td>一樓流量僅 1/4、FC 二通閥無自控、共通管容量 3%、水塔高差 <1m</td></tr></table></div>"],
  ["設計決策紀錄(Decision Log)","<div class='tblwrap'><table><tr><th>日期</th><th>決策</th><th>結論</th><th>理由</th></tr><tr><td class='date'>2025-09-26 前</td><td>設計電壓基準</td><td>⚠ 結論未明載(依後續設計推定維持 220V)</td><td>相容性 vs 申請成本</td></tr><tr><td class='date'>2025-11-27</td><td>冰機出水方向</td><td>左出水</td><td>操控面板動線</td></tr><tr><td class='date'>2025-11-27</td><td>長交期設備</td><td>先行排產,不構成採購承諾</td><td>冰機、水泵交期卡工期</td></tr><tr><td class='date'>2026-01-22</td><td>一期既設線路</td><td>重拉線,線標依電控盤端子台編號</td><td>線材長度不足</td></tr><tr><td class='date'>2026-01-22</td><td>水塔液位感測</td><td>光電式(四線)埋入水塔內壁</td><td>可靠度</td></tr></table></div>"]],
  fb:["影響採購的前提要設回覆期限:供電電壓給業主明確期限(9/26),避免選型停擺。","接手舊系統一定要現場盤查,不可信任前包商圖面(2/14 預巡檢攔下舊圖錯誤);「舊圖與現況不符」應列為風險項報價。","盤體設計往返宜用版次圖控管;高階甲方應以正式送審(Submittal)流程管理。"]},
 {id:"03",name:"報價",en:"Quotation",
@@ -409,7 +409,7 @@ function vOverview(){
     <tr><th style="width:120px">業主</th><td>泓格科技(傅國鈞廠長、游尚明 Cony、邱奕隆 Aaron、Evanna Lin)</td></tr>
     <tr><th>承商</th><td>理頓實業/泓文能源(施泓光 Hunter)</td></tr>
     <tr><th>協力</th><td>堃霖(冰水主機 KLFW-160DV)、普立捷(自控/動力,楊副理)、呈輝(電控盤)、簡老師(技術顧問)、泓格高雄 FAE</td></tr>
-    <tr><th>監控系統</th><td>泓格自有:iP-8841 PAC、I-87051W、PM-4324A 電表、NS-205A/208A/216、GW-100-LRS</td></tr>
+    <tr><th>監控系統</th><td>泓格自有:BRK-2841M、iP-8841-MTCP、I-87051W、PM-4324A 電表、NS-205A/208A/216、GW-100-LRS</td></tr>
   </table></div></div>
   <h2>八階段文件狀態</h2>
   <div class="grid g2">${cards}</div>
