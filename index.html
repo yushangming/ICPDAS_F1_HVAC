@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>泓格一廠空調工程 — 報告與SI範本</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --teal:#0B6E8A; --teal-dk:#08556B; --side:#0B2E3A; --side2:#0A2733;
+  --ink:#15343E; --ink2:#4A6570; --paper:#F3F7F8; --card:#FFFFFF; --line:#D9E4E7;
+  --amber:#B45309; --amber-bg:#FBF1E6; --green:#1E7A46; --green-bg:#E9F4EC;
+  --gold:#A9740A; --gold-bg:#FaF3E2;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+body{margin:0;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,-apple-system,sans-serif;
+  background:var(--paper);color:var(--ink);font-size:15px;line-height:1.75}
+a{color:var(--teal)}
+.layout{display:flex;min-height:100vh}
+/* ---------- sidebar ---------- */
+.side{width:236px;flex:0 0 236px;background:linear-gradient(180deg,var(--side),var(--side2));color:#CFE3EA;
+  position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 0 28px}
+.brand{padding:0 20px 14px;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:12px}
+.brand .t1{font-size:12px;letter-spacing:.14em;color:#7FAEBD;text-transform:uppercase}
+.brand .t2{font-size:17px;font-weight:700;color:#fff;line-height:1.4;margin-top:2px}
+.brand .t3{font-size:11.5px;color:#8FB6C3;margin-top:4px}
+.navgrp{padding:10px 12px 2px;font-size:11px;letter-spacing:.12em;color:#6E9AA9}
+.nav a{display:flex;align-items:center;gap:8px;padding:7px 20px;color:#C6DDE5;text-decoration:none;font-size:14px;border-left:3px solid transparent}
+.nav a:hover{background:rgba(255,255,255,.06);color:#fff}
+.nav a.on{background:rgba(255,255,255,.10);border-left-color:#6CC4DD;color:#fff;font-weight:700}
+.nav a:focus-visible,.chip:focus-visible,button:focus-visible,input:focus-visible,.gap-item:focus-visible{outline:2px solid #6CC4DD;outline-offset:2px}
+.nav .num{font-size:11px;color:#7FAEBD;font-variant-numeric:tabular-nums;width:20px}
+.sideft{padding:16px 20px 0;font-size:11px;color:#6E9AA9;line-height:1.7}
+/* ---------- main ---------- */
+.main{flex:1;min-width:0;padding:34px 44px 80px}
+.wrap{max-width:1040px;margin:0 auto}
+.eyebrow{font-size:12px;letter-spacing:.16em;color:var(--teal);font-weight:700;text-transform:uppercase}
+h1{font-size:26px;margin:4px 0 6px;text-wrap:balance;letter-spacing:.01em}
+h2{font-size:18px;margin:34px 0 12px;padding-left:10px;border-left:4px solid var(--teal)}
+.sub{color:var(--ink2);font-size:14px;margin-bottom:22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:14px 0}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+/* stats */
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.stat .k{font-size:12px;color:var(--ink2)}
+.stat .v{font-size:26px;font-weight:800;color:var(--teal);font-variant-numeric:tabular-nums;line-height:1.3}
+.stat .v.warn{color:var(--amber)}
+.stat .n{font-size:11.5px;color:var(--ink2)}
+/* tables */
+.tblwrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13.5px;background:var(--card)}
+th{background:#E7EFF2;color:#20505E;text-align:left;font-size:12.5px;letter-spacing:.03em;white-space:nowrap}
+th,td{border:1px solid var(--line);padding:7px 10px;vertical-align:top}
+td.num,td.date{white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--ink2)}
+tr:hover td{background:#F7FAFB}
+/* chips & badges */
+.chip{display:inline-block;border:1px solid var(--line);background:#fff;border-radius:999px;padding:3px 12px;font-size:13px;cursor:pointer;color:var(--ink2)}
+.chip.on{background:var(--teal);border-color:var(--teal);color:#fff;font-weight:700}
+.b{display:inline-block;border-radius:999px;padding:1px 9px;font-size:12px;font-weight:700;white-space:nowrap}
+.b.ok{background:var(--green-bg);color:var(--green)}
+.b.half{background:var(--gold-bg);color:var(--gold)}
+.b.gap{background:var(--amber-bg);color:var(--amber)}
+.b.stage{background:#E3EEF2;color:var(--teal-dk);font-weight:600}
+/* timeline */
+.tl{position:relative;margin:18px 0 0;padding-left:26px}
+.tl::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tl .ev{position:relative;padding:5px 0 5px 8px}
+.tl .ev::before{content:"";position:absolute;left:-23.5px;top:13px;width:9px;height:9px;border-radius:50%;background:var(--teal);border:2px solid #fff;box-shadow:0 0 0 1.5px var(--teal)}
+.tl .ev.mile::before{background:var(--amber);box-shadow:0 0 0 1.5px var(--amber)}
+.tl .d{font-size:12.5px;color:var(--ink2);font-variant-numeric:tabular-nums;font-weight:700}
+.tl .pl{font-size:11px;color:#7A95A0;margin-left:6px}
+/* problems */
+.prob{border-left:4px solid var(--amber)}
+.prob h3{margin:0 0 6px;font-size:15px}
+.prob .row{display:grid;grid-template-columns:64px 1fr;gap:4px 10px;font-size:13.5px}
+.prob .lab{color:var(--ink2);font-size:12px;font-weight:700;padding-top:2px}
+/* stage view */
+.gatebox{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.gatebox .card{margin:0}
+.gatebox .h{font-size:12px;letter-spacing:.1em;color:var(--teal);font-weight:700;margin-bottom:4px}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;margin:12px 0;padding:0}
+details>summary{cursor:pointer;padding:13px 18px;font-weight:700;font-size:14.5px;color:var(--teal-dk);list-style:none;display:flex;align-items:center;gap:8px}
+details>summary::before{content:"▸";color:var(--teal);transition:transform .15s}
+details[open]>summary::before{transform:rotate(90deg)}
+details>.inner{padding:2px 18px 16px}
+/* gaps */
+.gap-grp{margin:20px 0}
+.gap-grp .gh{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.gap-grp .gh b{font-size:15px}
+.bar{flex:1;min-width:140px;height:8px;border-radius:99px;background:#E2EBEE;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--green);border-radius:99px;transition:width .25s}
+.pct{font-size:12px;color:var(--ink2);font-variant-numeric:tabular-nums;min-width:74px;text-align:right}
+.gap-item{display:flex;gap:10px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:9px 13px;margin:6px 0;cursor:pointer}
+.gap-item input{margin-top:4px;accent-color:var(--green);width:16px;height:16px;flex:0 0 auto}
+.gap-item.done{background:#F2F8F3;border-color:#CBE3D2}
+.gap-item.done .t{color:#6E8A77;text-decoration:line-through}
+.gap-item .t{font-size:14px}
+.searchbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:14px 0}
+input[type=search]{border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:14px;min-width:230px;font-family:inherit;background:#fff}
+.note{background:var(--amber-bg);border:1px solid #EAD3B8;border-radius:10px;padding:12px 16px;font-size:13.5px;color:#7A4A12}
+.note b{color:var(--amber)}
+.kbd{background:#E7EFF2;border-radius:4px;padding:1px 7px;font-size:12.5px;color:var(--teal-dk)}
+.foot{margin-top:46px;padding-top:14px;border-top:1px solid var(--line);font-size:12px;color:var(--ink2)}
+ul.tight{margin:6px 0;padding-left:22px}
+ul.tight li{margin:4px 0}
+.topbar{display:none}
+@media(max-width:900px){
+  .layout{display:block}
+  .side{display:none}
+  .topbar{display:block;position:sticky;top:0;z-index:9;background:var(--side);padding:10px 14px 0;color:#fff}
+  .topbar .t2{font-weight:700;font-size:15px}
+  .topbar .nav2{display:flex;gap:6px;overflow-x:auto;padding:8px 0 10px;-webkit-overflow-scrolling:touch}
+  .topbar .nav2 a{flex:0 0 auto;color:#CFE3EA;text-decoration:none;font-size:13px;padding:4px 12px;border:1px solid rgba(255,255,255,.25);border-radius:99px;white-space:nowrap}
+  .topbar .nav2 a.on{background:#fff;color:var(--side);font-weight:700}
+  .main{padding:22px 16px 60px}
+}
+@media print{.side,.topbar{display:none}.main{padding:0}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="t2">❄️ 泓格一廠空調工程 — 報告與SI範本</div>
+  <nav class="nav2" id="mnav"></nav>
+</div>
+<div class="layout">
+<aside class="side">
+  <div class="brand">
+    <div class="t1">ICP DAS · F1 HVAC</div>
+    <div class="t2">泓格一廠空調工程<br>報告與 SI 範本</div>
+    <div class="t3">2024-10 現勘 → 2026-07 驗收中</div>
+  </div>
+  <nav class="nav" id="nav"></nav>
+  <div class="sideft">資料正本:Obsidian<br>08_報告與SI範本 ·<br>09_合作夥伴 · 10_能源基線<br>頁面版本:2026-07-09</div>
+</aside>
+<main class="main"><div class="wrap" id="app"></div></main>
+</div>
+
+<script>
+/* ============ 資料(由 08_報告與SI範本 10 份 md 產生,2026-07-03) ============ */
+const TL=[ // p:1現勘一階 2二階設計 3二階施工 4試車驗收, m:里程碑
+{p:1,d:"2024-10-23",t:"一、二廠空調現勘,取得設備銘牌、電力紀錄、冰機錶頭資料",m:1},
+{p:1,d:"2024-10-31 / 11-04",t:"初勘報告提交與修訂(場勘數據、估值、水泵改善效益、改善方案)"},
+{p:1,d:"2024-11-14 / 11-19",t:"現勘資料討論會;三階段設備簡易估價(誤差 ±15~20%)"},
+{p:1,d:"2025-01-06 ~ 01-22",t:"感測器規格確認(業主自尋同規格感測器,承商審查精度與可安裝性)"},
+{p:1,d:"2025-02-11",t:"第一階段報價單、工程內容、圖面、合約簽訂;施工說明書提交",m:1},
+{p:1,d:"2025-03-20",t:"施工前協調會(施工說明書 20250320 版、會議紀錄)"},
+{p:1,d:"2025-03 ~ 04",t:"電動蝶閥、感測器安裝施工;4/10 發生冰機跳機事件(見「問題」#1)"},
+{p:1,d:"2025-04-25",t:"驗收申請,提交驗收清單與施工後注意事項"},
+{p:1,d:"2025-05 ~ 06",t:"感測器校正、PT-100 斷線問題處理、數據採集驗證"},
+{p:1,d:"2025-06-22",t:"感測器全數安裝並校正完畢"},
+{p:1,d:"2025-07-25",t:"第一階段驗收清單簽回,一階完成",m:1},
+{p:2,d:"2025-07-09",t:"一階數據檢討會議(資料清洗需求、冷卻水不平均、二樓冷房不佳、二階控制盤位置)"},
+{p:2,d:"2025-08-19",t:"二階段會議,確認執行項目"},
+{p:2,d:"2025-09-02",t:"二階設計規劃說明會;會後現場勘查(發現 SMT 區新增管路)"},
+{p:2,d:"2025-09-17",t:"室內管路盤查與流速量測(發現一樓流量僅總量 1/4、FC 二通閥無自控)"},
+{p:2,d:"2025-10-21",t:"改善點位表確認;監控系統 IO 表(20251020)"},
+{p:2,d:"2025-11-06",t:"預算書及圖面(含電路單線圖)提交"},
+{p:2,d:"2025-11-11 ~ 11-13",t:"差壓式流量計表頭 ISO 5167 取樣規範、MCU 驗證方法討論"},
+{p:2,d:"2025-11-14 ~ 11-24",t:"動力盤/電控盤架構反覆確認(220V 供電、CT 模組、通訊架構)"},
+{p:2,d:"2025-11-27",t:"最終規格確認會議:冰機改左出水、長交期設備(冰機、水泵)先行排產"},
+{p:2,d:"2025-12-16 ~ 12-26",t:"報價修訂(控制盤、機房裝修、二樓燈控納入);12/26 會議紀錄與工作計畫書"},
+{p:2,d:"2026-01-05",t:"議價後最終報價單(v5)及合約定案(1/6 前完成以鎖定廠商牌價)",m:1},
+{p:3,d:"2026-01-08",t:"工程前協調會(廠務段)"},
+{p:3,d:"2026-01-14",t:"工程前協調會(監控段、自動控制器具設備),含 checklist"},
+{p:3,d:"2026-01-19",t:"管路工程開工,開始每週施工計劃週報制",m:1},
+{p:3,d:"2026-01-22 / 01-26",t:"材料入料(RCV-202601-002);管路進度超前,協調提前於年節施工與提早放水"},
+{p:3,d:"2026-02-02 ~ 02-13",t:"動力盤/電控盤配置細部協調(模組排列、CT 線長、羅氏線圈訂製)"},
+{p:3,d:"2026-02-12",t:"堃霖梓官廠冰水主機廠測(FAT),含通訊點位測試、性能測試",m:1},
+{p:3,d:"2026-02-14",t:"二樓切管預巡檢,發現前包商竣工圖嚴重錯誤,重繪圖面(V4 revised)"},
+{p:3,d:"2026-02-24",t:"週報:水泵船期延誤(預計 3/5 到廠),試車延至 3/8 後;追加項目陸續發生"},
+{p:3,d:"2026-03-03",t:"主電絕緣測試(500V 檔位,絕緣值 >100MΩ,合格)"},
+{p:3,d:"2026-03-09",t:"電控盤廠測(呈輝);3/10 電控盤進廠"},
+{p:3,d:"2026-03-14 ~ 03-18",t:"管路試壓(3kg / 12 小時)發現微洩壓,逐點排查與修復"},
+{p:3,d:"2026-03-20 ~ 03-25",t:"保溫工程、滿焊完成、管路上漆"},
+{p:3,d:"2026-03-23",t:"1 號冰機送電、開機測試正常;管路工程完工",m:1},
+{p:3,d:"2026-03-31",t:"動力盤相關設備(2 號冰機、泵 02/03、水塔 02/03)試俥"},
+{p:4,d:"2026-04-16",t:"電控盤現場測試(IO 單點測試表),廠務端測試紀錄提出"},
+{p:4,d:"2026-04-17 ~ 04-21",t:"缺失改善(DI 線路、流量計線頭、變頻器 Modbus 位址、電表接入、水流開關)"},
+{p:4,d:"2026-04-16 ~ 04-28",t:"教育訓練:冰水系統操作流程、溫度校正 SOP、冰機、變頻器、加壓泵"},
+{p:4,d:"2026-04-23 ~ 05-23",t:"依驗收條款連續 30 日運轉無重大狀況",m:1},
+{p:4,d:"2026-05-25",t:"承商提出結案會議申請;業主提出備機未長時間運轉、壓差開機、教育訓練文件等待辦事項"},
+{p:4,d:"2026-06-23",t:"結案文件交付(完工報告書、PLC 圖面、操作保養手冊、竣工圖 V5、教育訓練文檔)"},
+{p:4,d:"2026-06-26",t:"結案會議:各設備運轉功能正常,廠長指示 7/1 起進行驗收程序;提出遺留問題與建議"},
+{p:4,d:"2026-07-01",t:"驗收程序開始(目前狀態)",m:1},
+{p:4,d:"2026-07-03",t:"完工報告書重整為台積電等級範本 Rev.A(13 章+附錄 A~E),交承商回填後出具 Rev.B 正式版"},
+{p:4,d:"2026-07-07",t:"改善前能源基線報告 Rev.3 完成(2025-09~11 基線、EnB 模型、資料修復工具、整合三方 AI 審查)",m:1},
+{p:4,d:"2026-07-08",t:"能源基線報告 Rev.4 完成:第二輪三方文件/程式/報告一致性審查(統計數字不變,修正文字口徑與 Word 版面);新增《技術說明》《SOP》開發維護文件",m:1},
+{p:4,d:"2026-07-08 / 07-09",t:"能源基線報告 Rev.5 → Rev.6:採納節能廠商意見,以冷凝器進水溫(ECWT)為第二相關變數,正式基線改為多元迴歸模型 B(日 kWh=0.907×RT·h+13.19×ECWT−190.3,R²=0.956),模型 A 併列對照;再依 Manus/Gemini/ChatGPT 交叉審查完成 Rev.6(估算比例三分母、殘差診斷、ECWT 決策表、具名簽核、可追溯性雜湊、附錄 D)",m:1},
+];
+const PERIODS=["全部","現勘與一階(2024-10~2025-07)","二階設計與合約(2025-07~2026-01)","二階施工(2026-01~03)","試車與驗收(2026-04~)"];
+
+const PROBS=[
+{s:"一階施工",q:"2025-04-10 冰機多次跳機",w:"冷卻水泵低壓側負壓吸入空氣、水塔水位不足;施工關閥造成水路壓力變化、閒置水塔大量漏水,水失衡導致冰機壓力異常",f:"以 email 完整釐清因果與責任;要求監控冰機壓力錶維持 12~15kg;一階完成流量計安裝補足監測盲區"},
+{s:"一階施工",q:"PT-100 拆裝後斷線(讀值 327.67)",w:"螺牙式感溫棒拆裝時導線隨螺紋扭轉多圈造成內部斷線",f:"建議改用圓頭可分離接線式或活動螺牙式感溫棒;更換損壞品"},
+{s:"設計",q:"業主自購 RTD 精度未達 DIN 1/3(0.1°C)要求",w:"選型規格審查發現",f:"承商審查把關,回覆規格意見;超音波流量計並提示實務誤差風險(曾有 10% 落差案例)"},
+{s:"一階運轉",q:"流量計讀值疑義(3036 vs 泵標示 1972 L/min);冷卻水流量偶發 0 或異常值 >400",w:"泵銘牌流量為特定揚程下之值;水塔盛水盤與泵出口高差不足 1m,入口渦流吸入空氣干擾超音波量測",f:"說明泵性能曲線原理;建議系統端加 data filter、資料分析前先做資料清洗"},
+{s:"二階施工",q:"前包商竣工圖嚴重錯誤(進回水標反、管位不符、延伸管路未標注)",w:"前期工程文件品質不良、疑未執行 TAB",f:"2/14 切管前預巡檢及時發現;重新巡檢繪製正確圖面,機房管路一併優化"},
+{s:"二階施工",q:"水泵船期延誤(年前貨量大)",w:"進口設備長交期風險",f:"試車順延至 3/8 後,以週計畫滾動調整;合約階段已預先「先行排產不構成採購承諾」降低交期風險"},
+{s:"二階試壓",q:"3kg/12hr 站壓測試洩壓(0.1kg/hr ≈ 80cc/hr)",w:"新焊點全數合格;洩漏源為既有二通閥 AB 膠、法蘭橡膠微滲等",f:"肥皂水逐點排查 → 灌水加壓定位 → 熱顯儀輔助;逐點修復完成後才進行保溫"},
+{s:"試車",q:"1 號冰機無法啟動",w:"既設水流開關電阻值異常;水泵更換後水壓差開關彈簧鬆弛無法接通",f:"追加 2 組水流開關;調整壓差開關設定範圍,連續兩日開機正常"},
+{s:"試車",q:"變頻器 Modbus 通訊 illegal address",w:"變頻器位址為 0-based,位址=選單編號×10−1",f:"換算後通訊正常,可撈回數值"},
+{s:"廠測",q:"堃霖冰機 Modbus TCP port 被 HMI 佔用",w:"原廠架構限制,且堃霖不提供轉換模組",f:"加購泓格 RS-485 轉 TCP 模組,符合監控設計"},
+{s:"試車",q:"冰機警報復歸順序錯置會導致無法手動開關機",w:"原廠程式撰寫問題",f:"與原廠確認 SOP:先硬體 reset → 再軟體復歸(先上後下);錯置時需關盤內小電再關大電重啟;流程文件化"},
+{s:"設計",q:"廠內 220V 3φ 與設備主流 380/440V 規格衝突;配盤內 220V 單相需求",w:"既有廠區供電條件",f:"設計階段提前(9/18)提出請業主於 9/26 前定案;盤內以獨立斷路器+紅色標示插座隔離處理"},
+{s:"設計",q:"電控盤電源干擾疑慮(二廠曾發生圖控資料異常)",w:"電源、接地、線材隔離問題",f:"電控盤採雙電源設計;變頻器通訊走網路(NS-208A);電表 RS-485 手拉手串接、流量計獨立 RS-485"},
+{s:"採購",q:"羅氏線圈訂製交期不確定、差壓計遺失",w:"訂製品交期、工班保管疏失",f:"2 號冰機電表暫維持原位、線圈到貨後由業主自行掛載;差壓計加急訂貨(不影響空調,僅影響控制接線時程)"},
+{s:"遺留",q:"冷卻水塔共通管容量僅最大水量 3%(ASHRAE 建議 15%),2 號水塔組液位不平衡",w:"既有系統設計限制",f:"建議:作主要運轉用則更換共通管;作備機用可不換,但啟動需 5~10 分鐘調整;液位計為接觸式需留意"},
+{s:"遺留",q:"SMT 烤爐區熱負載約 20 USRT,風機能力僅約 1/3;二樓悶熱",w:"區域冷量先天不足",f:"建議補足約 14 USRT,以氣冷箱型機為佳(上方管路空間有限);出水溫度下調 11/13°C 測試觀察;高溫日開啟加壓泵"},
+];
+
+const ST={ok:'<span class="b ok">✅ 已具備</span>',half:'<span class="b half">◐ 部分</span>',gap:'<span class="b gap">⚠ 需要補充</span>'};
+const STAGES=[
+{id:"01",name:"現勘",en:"Site Survey",
+ purpose:"掌握既有系統現況(設備、管路、電力、控制)、建立能耗基線、辨識改善機會與風險,作為設計與估價依據。",
+ gate:"初勘報告經業主確認,改善方向與粗估效益獲認可,同意進入設計/估價。",
+ docs:[["1-1","現勘計畫書(含資料需求清單)","half","以 email 敘明,未成正式文件"],
+ ["1-2","現勘紀錄表","gap","銘牌與量測資料散於照片與 email,未結構化"],
+ ["1-3","現勘照片冊","gap","照片散於業主提供附件"],
+ ["1-4","初勘報告","ok","2024-10-31 提交、11-04 修訂;三階段規劃、估價誤差 ±15~20%"],
+ ["1-5","能源基線報告","ok","2026-07-09 改善前基線 Rev.6 完成:2025-09~11 一階感測數據(修復後),系統能效 1.069 kW/RT、多元迴歸 EnB 模型(含 ECWT)建立 → 見「10 能源基線」"],
+ ["1-6","精密量測計畫與報價","ok","水側量測及施工-20241119"],
+ ["1-7","現勘安全告知/入廠申請","gap","本案一般廠區未留存;高階甲方必備"]],
+ extra:[["初勘報告範本章節","<ul class='tight'><li>現勘概要(日期、範圍、人員)</li><li>系統現況描述(主機、水泵、水塔、管路、控制)</li><li>能耗現況分析(基線:kW、kW/RT、運轉時段)</li><li>問題與改善機會(依效益排序,以顏色/等級區分)</li><li>改善方案與階段規劃(含各階段粗估費用、工期)</li><li>效益初估(節電量、回收年限)與誤差聲明</li><li>後續建議(精密量測需求)</li></ul><p style='font-size:13.5px'>⚠ 效益初估之「預估節電量與回收年限」需自初勘報告 p.3、p.5 摘出歸檔,作為 M&V 對照。</p>"]],
+ fb:["現勘當天取不到的資料(如送修中的電表),要指定補交期限並追蹤——本案業主主動補件,流程順利。","量測儀器數據要求「原始紀錄檔」而非截圖,便於後續建基線。","高階甲方案場:現勘前即需完成承攬商登錄、人員工安卡、保險證明,前置期至少預留 2~4 週。"]},
+{id:"02",name:"設計",en:"Design",
+ purpose:"將改善方案轉為可施工、可採購、可驗收的完整圖說與規格;凍結技術規格供報價。",
+ gate:"設計審查會議通過;圖面、點位表、設備規格經業主書面確認(規格凍結);重大前提(如供電電壓)已由業主定案。",
+ docs:[["2-1","設計需求書(Basis of Design)","gap","前提散於會議與 email"],
+ ["2-2","負載計算書","gap","僅 SMT 區 20USRT 等零星估算"],
+ ["2-3","水力計算書","gap","僅彎頭損失計算之 email 結論"],
+ ["2-4","系統流程圖(P&ID)","ok","工作圖 V3 → V4 revised → V5 final(竣工)"],
+ ["2-5","電力單線圖","ok","單線圖 1141124(含 CT 模組 PM-4324A-100P 修訂)"],
+ ["2-6","盤體設計圖(動力盤/電控盤)","half","dwg 往返於 email;2026-02 模組配置定案"],
+ ["2-7","監控點位表(IO 表)","ok","監控系統IO表-20251020、點位對照表"],
+ ["2-8","感測器/設備選型規格書","half","感測器規格審查 email;差壓計 ISO 5167 簡報"],
+ ["2-9","通訊架構圖","half","email 文字確認(電表 RS-485 手拉手、變頻器走網路);無正式圖"],
+ ["2-10","設計審查會議紀錄","ok","20251226、20260108、20260114"],
+ ["2-11","設計變更紀錄表","gap","V3→V4→V5 差異未列表"],
+ ["2-12","規範書(Specification)","gap","僅零星引用 ASME B31.3、ISO 5167、ASHRAE"]],
+ extra:[["設計需求書(本案回填重點)","<div class='tblwrap'><table><tr><th>欄位</th><th>本案內容</th></tr><tr><td>供電條件</td><td>廠內 220V 3φ 60Hz;盤內 220V 單相→10A 斷路器+紅色插座隔離</td></tr><tr><td>主機規格</td><td>堃霖 KLFW-160DV-1GDG 雙壓縮機,<b>左出水</b>(2025-11-27 定案)</td></tr><tr><td>監控平台</td><td>泓格 iP-8841、I-87051W、PM-4324A、NS-205A/208A/216、GW-100-LRS;圖控 AVEVA Edge 2020(1500 Tag)</td></tr><tr><td>感測精度</td><td>RTD 0.1°C / DIN 1/3;差壓流量計依 ISO 5167</td></tr><tr><td>抗干擾</td><td>電控盤雙電源;變頻器走乙太網路;電表 RS-485 串接單獨拉線;流量計獨立 RS-485</td></tr><tr><td>既有限制</td><td>一樓流量僅 1/4、FC 二通閥無自控、共通管容量 3%、水塔高差 <1m</td></tr></table></div>"],
+ ["設計決策紀錄(Decision Log)","<div class='tblwrap'><table><tr><th>日期</th><th>決策</th><th>結論</th><th>理由</th></tr><tr><td class='date'>2025-09-26 前</td><td>設計電壓基準</td><td>⚠ 結論未明載(依後續設計推定維持 220V)</td><td>相容性 vs 申請成本</td></tr><tr><td class='date'>2025-11-27</td><td>冰機出水方向</td><td>左出水</td><td>操控面板動線</td></tr><tr><td class='date'>2025-11-27</td><td>長交期設備</td><td>先行排產,不構成採購承諾</td><td>冰機、水泵交期卡工期</td></tr><tr><td class='date'>2026-01-22</td><td>一期既設線路</td><td>重拉線,線標依電控盤端子台編號</td><td>線材長度不足</td></tr><tr><td class='date'>2026-01-22</td><td>水塔液位感測</td><td>光電式(四線)埋入水塔內壁</td><td>可靠度</td></tr></table></div>"]],
+ fb:["影響採購的前提要設回覆期限:供電電壓給業主明確期限(9/26),避免選型停擺。","接手舊系統一定要現場盤查,不可信任前包商圖面(2/14 預巡檢攔下舊圖錯誤);「舊圖與現況不符」應列為風險項報價。","盤體設計往返宜用版次圖控管;高階甲方應以正式送審(Submittal)流程管理。"]},
+{id:"03",name:"報價",en:"Quotation",
+ purpose:"依凍結之設計提出完整報價,範圍、除外項目、前提條件無歧義。",
+ gate:"業主議價完成、報價單雙方確認版本一致,進入合約。",
+ docs:[["3-1","工程報價單(BOQ)","ok","一階 20250211 簽署版;二階 QUO-202511-001、2026-01-05 v5 最終版"],
+ ["3-2","數量計算書","gap",""],
+ ["3-3","單價分析表(PC 表)","gap","高階甲方議價與追加減計價依據"],
+ ["3-4","報價說明書(範圍/除外/前提)","half","散於 email(如「二階不含泵浦更換」)"],
+ ["3-5","預定工期表(基準時程)","half","滾動週計畫,無總基準時程"],
+ ["3-6","付款條件與里程碑","gap","筆記庫未載"],
+ ["3-7","報價版次差異對照","ok","佳例:2026-01-05 email 明列 v5 與初版差異"],
+ ["3-8","有效期與價格前提聲明","ok","佳例:「1/6 前完成合約,價格不變動」"]],
+ extra:[["本案報價歷程","<div class='tblwrap'><table><tr><th>日期</th><th>事項</th></tr><tr><td class='date'>2024-11-19</td><td>簡易估價(±15~20%):一階儀表、二階 82 萬變頻設備、三階冰機汰換;業主誤解即時書面澄清(佳例)</td></tr><tr><td class='date'>2025-02-11</td><td>一階報價單簽署(與合約、施工說明書、圖面同日定案)</td></tr><tr><td class='date'>2025-11-06</td><td>二階預算書及圖面提交(含單線圖)</td></tr><tr><td class='date'>2025-12-16</td><td>依會議修訂:控制盤修改、新增機房裝修、二樓燈控</td></tr><tr><td class='date'>2025-12-26</td><td>v5 報價:運什費、水路修改(6 組閥件)、自控盤改滿配、管銷/監造費調整</td></tr><tr><td class='date'>2026-01-05</td><td>議價後最終報價單(費用攤入細項)與合約定案</td></tr></table></div><p style='font-size:13.5px'>⚠ 各版本金額、最終合約金額、付款里程碑請自報價單 PDF 與合約補登,以利結案成本分析。</p>"],
+ ["報價檢核表(面向高階甲方)","<ul class='tight'><li>BOQ 每一項可對應到圖面或規格書條文</li><li>除外項目明文化(既有系統缺陷修復、TAB、停電費用、夜間/假日加給)</li><li>「既有圖面與現況不符」之處理方式與計價原則已載明(本案教訓)</li><li>長交期設備交期與先行排產條款(本案佳例)</li><li>追加減帳計價基準(單價分析表)已附</li><li>牌價/匯率調整條款與報價有效期</li><li>稅、保險、履約保證費用歸屬</li></ul>"]],
+ fb:[]},
+{id:"04",name:"合約",en:"Contract",
+ purpose:"將範圍、時程、價格、品質、驗收、保固、責任以法律文件固定。",
+ gate:"合約雙方用印,開工前置條件(保險、保證金、工安文件)齊備。",
+ docs:[["4-1","工程合約本文","ok","一階 20250211;二階 合約0105、合約及附件第29頁"],
+ ["4-2","合約附件(報價單/圖面/施工說明書)","ok","施工說明書 20250211(0320 修訂版)"],
+ ["4-3","驗收條款(含量化標準)","ok","二階採「連續一個月運轉無狀況」"],
+ ["4-4","保固條款/保固書","gap","各設備保固起訖未彙整"],
+ ["4-5","履約保證金/銀行保函","gap","本案未見;高階甲方必備(5~10%)"],
+ ["4-6","保險證明","gap","高階甲方開工前必查驗"],
+ ["4-7","承攬商工安切結/危害告知","gap",""],
+ ["4-8","分包商清冊與資格文件","gap","配管工班、電包、呈輝、普立捷未成正式清冊"],
+ ["4-9","逾期罰則/趕工條款","gap","是否載於合約需查本文"]],
+ extra:[["重點條款(依本案經驗設計)","<ul class='tight'><li><b>附件版次鎖定</b>:範圍以合約附件(報價單 v_、圖面 V_、施工說明書 Rev._)為準。</li><li><b>變更程序</b>:追加減需「變更申請單」書面核准後施作,計價依單價分析表。</li><li><b>本案教訓條款</b>:「業主提供之既有圖面僅供參考,若與現況不符致需變更設計或增加工項,依變更程序辦理」。</li><li><b>長交期條款(佳例)</b>:「先行排產不構成採購承諾,設備單價仍以正式合約為準」。</li><li><b>責任釐清(佳例)</b>:「電話或口頭指示應於當日以 email 補送全體相關人員」(業主 2025-05-02 要求)。</li></ul>"],
+ ["開工前置檢核表(高階甲方版)","<ul class='tight'><li>合約用印完成、附件版次鎖定</li><li>履約保證金/保函繳交</li><li>保險單影本送審(營造綜合險、雇主責任、第三人責任)</li><li>承攬商/分包商登錄、人員名冊與證照(電匠、焊工、高架、職安卡)</li><li>危害告知與工安切結簽認</li><li>施工計畫書、工安衛計畫送審核准</li><li>開工會議(Kick-off)紀錄 — 本案 ✅ 20260108、20260114</li></ul>"]],
+ fb:[]},
+{id:"05",name:"施工",en:"Construction",
+ purpose:"依核准之施工計畫與圖說完成安裝,品質、工安、進度紀錄完備。",
+ gate:"實體工程完工、品質檢驗紀錄(ITP)關閉、進入試車。",
+ docs:[["5-1","整體施工計畫書","ok","20251226 版"],
+ ["5-2","週施工計劃(進度週報)","ok","完整系列:1/19 起至 3/30"],
+ ["5-3","施工前協調會紀錄","ok","一階 20250320、二階 20260108/20260114(含 checklist)"],
+ ["5-4","施工日報","gap","本案以週報代替;高階甲方要求日報"],
+ ["5-5","材料設備送審(Submittal)與追蹤表","half","規格審查有 email 往返;無送審追蹤表"],
+ ["5-6","入料檢驗單","ok","RCV-202601-002 等"],
+ ["5-7","品質檢驗表(ITP/自主檢查表)","half","試壓、絕緣有做且留 email;無正式 ITP 表單"],
+ ["5-8","工安文件(動火/高架許可、TBM)","gap","本案有動火(滿焊)、高架作業,未留許可單"],
+ ["5-9","變更/追加申請與追蹤表","gap","追加項目散於週報"],
+ ["5-10","停電/停機申請單","half","以 email 協調"],
+ ["5-11","線標/端子對照表","ok","線標_20260128"],
+ ["5-12","施工照片(前/中/後)","gap","散於 email 圖片,未成冊"]],
+ extra:[["品質檢驗(ITP)本案實績","<div class='tblwrap'><table><tr><th>檢驗項目</th><th>標準</th><th>本案實績</th></tr><tr><td>管路壓力測試</td><td>ASME B31.3,1.5 倍設計壓站壓 12hr</td><td>✅ 3/14-15 執行 3kg/12hr;0.1kg/hr 洩壓→逐點排查修復複測(⚠ 缺正式測試報告)</td></tr><tr><td>主電絕緣測試</td><td>500V 檔,≥標準值</td><td>✅ 3/3 >100MΩ 合格(⚠ 缺紀錄表單)</td></tr><tr><td>焊接檢驗</td><td>滿焊、防鏽處理</td><td>✅ 3/20 滿焊完成(email 紀錄)</td></tr><tr><td>保溫施工</td><td>材質/厚度依規範</td><td>✅ 3/16~ 完成(⚠ 無檢驗紀錄)</td></tr><tr><td>配線與線標</td><td>依端子台編號逐點核對</td><td>✅ 線標表;4 月發現端子 31/32 漏接→改善(教訓:送電前應 100% 自主檢查)</td></tr></table></div>"],
+ ["變更/追加彙整(9 項)","<div class='tblwrap'><table><tr><th>提出日</th><th>項目</th><th>原因</th><th>計價</th></tr><tr><td class='date'>2026-03-02</td><td>冷卻水塔區塑膠管閥更換 6 組</td><td>既有閥件鏽蝕</td><td>⚠</td></tr><tr><td class='date'>2026-03-02</td><td>冰水泵 03 位移之管路增設</td><td>配置優化</td><td>⚠</td></tr><tr><td class='date'>2026-03-02</td><td>機械式壓力表 4 組、溫度表 4 組</td><td>既有表頭故障</td><td>⚠</td></tr><tr><td class='date'>2026-03-02</td><td>電控盤後牆板補平</td><td>現場條件</td><td>⚠</td></tr><tr><td class='date'>2026-03-02</td><td>動力盤新設電表表頭</td><td>監測需求</td><td>⚠</td></tr><tr><td class='date'>2026-03-24</td><td>追加 2 組水流開關</td><td>既設開關電阻異常致冰機無法啟動</td><td>⚠</td></tr><tr><td class='date'>2026-03-24</td><td>維修室冰水管路不鏽鋼板復歸</td><td>廠長同意之收尾</td><td>⚠</td></tr><tr><td class='date'>2026-03-24</td><td>管路與牆面縫隙填補</td><td>防鼠害咬線</td><td>⚠</td></tr><tr><td class='date'>2025-12-16</td><td>機房裝修、二樓燈控</td><td>會議納入</td><td>已入 v5 ✅</td></tr></table></div><p style='font-size:13.5px'>⚠ 各項金額、業主核准紀錄、追加減總表為結案請款依據,需補齊。</p>"],
+ ["停電/停機作業紀錄","<div class='tblwrap'><table><tr><th>日期</th><th>作業</th><th>協調結果</th></tr><tr><td class='date'>2026-02-13</td><td>放水、停電(自 2/23 提前)</td><td>業主同意提前,前置更充裕</td></tr><tr><td class='date'>2026-03-07</td><td>台電歲修</td><td>氮氣機臨時電盤接回主動力盤</td></tr><tr><td class='date'>2026-03-29(日)</td><td>油漆補漆</td><td>廠長考量散味,准週日 10:00 進場 2hr</td></tr><tr><td class='date'>2026-03-31</td><td>動力盤設備試俥</td><td>11:30~12:30 避開廠內空調使用</td></tr><tr><td class='date'>2026-04-12(日)</td><td>電表掛回(斷電)、變頻器參數設定</td><td>集中週日斷電作業</td></tr></table></div>"]],
+ fb:["週報制+異常主動揭露,建立業主信任;高階甲方需升級為日報+週報+月報三層。","切管前預巡檢(2/14)攔下舊圖錯誤——「破管/切管前現場驗證」應列為標準 Hold Point。","遺失差壓計事件:工班工具材料保管應有進出場清點制度。","端子漏接於試車才發現:配線完成之點對點導通自主檢查應在送電前 100% 執行。"]},
+{id:"06",name:"試車",en:"Testing & Commissioning",
+ purpose:"驗證設備單體、系統整合、控制邏輯符合設計;缺失全數關閉;操作知識移轉給業主。",
+ gate:"FAT/SAT 通過、Punch List 歸零、連續運轉達驗收條款標準、教育訓練完成。",
+ docs:[["6-1","試車計畫書","gap","本案以 email 逐週安排"],
+ ["6-2","FAT 廠測報告","ok","冰水主機 2026-02-12 堃霖梓官廠;電控盤 2026-03-09 呈輝"],
+ ["6-3","SAT / IO 單點測試表","ok","20260416(廠務端同步紀錄,佳例)"],
+ ["6-4","功能測試報告(連鎖、警報、故障模擬)","half","復歸流程已釐清;2 號機故障測試結果待補"],
+ ["6-5","TAB 報告(測試調整平衡)","gap","本案未見正式 TAB;前包商未做 TAB 正是既有問題根源"],
+ ["6-6","缺失改善追蹤表(Punch List)","gap","缺失散於 4/16~4/21 email(本頁已彙整 9 項)"],
+ ["6-7","連續運轉紀錄","half","30 日達成以 email 聲明;⚠ 缺運轉數據佐證"],
+ ["6-8","教育訓練計畫、教材、簽到表","half","教材齊;⚠ 缺簽到表與訓練紀錄"],
+ ["6-9","感測器校正紀錄與 SOP","half","SOP 已建立;⚠ 缺逐點校正紀錄表"]],
+ extra:[["SAT / 試車時序","<div class='tblwrap'><table><tr><th>日期</th><th>測試項目</th><th>結果</th></tr><tr><td class='date'>2026-03-23</td><td>1 號冰機送電/開機</td><td>初期無法啟動→水流開關電阻異常、壓差開關彈簧鬆弛→處理後正常</td></tr><tr><td class='date'>2026-03-31</td><td>動力盤設備試俥</td><td>11:30~12:30 執行</td></tr><tr><td class='date'>2026-04-16</td><td>電控盤 IO 單點測試</td><td>產出缺失清單</td></tr><tr><td class='date'>2026-04-19</td><td>缺失複測</td><td>壓力差壓正常、流量計線頭修復、變頻器網路通、電表讀取正常</td></tr><tr><td class='date'>2026-04-21</td><td>變頻器 Modbus</td><td>0-based 位址換算後通訊正常;1 號機溫度校正補齊</td></tr><tr><td class='date'>2026-04-29</td><td>盤廠改 DI 線路/補電阻</td><td>其餘缺失補正</td></tr><tr><td class='date'>2026-04-23~05-23</td><td>連續 30 日運轉</td><td>達成驗收條款 ✅</td></tr></table></div>"],
+ ["Punch List 彙整(9 項)","<div class='tblwrap'><table><tr><th>發現日</th><th>缺失</th><th>改善</th><th>關閉</th></tr><tr><td class='date'>04-10</td><td>RS-485 端子 31/32 未接</td><td>重新接線</td><td class='date'>2026-04</td></tr><tr><td class='date'>04-16</td><td>RACK1-1/1-2 壓力、差壓讀不到</td><td>4/19 修復</td><td class='date'>04-19</td></tr><tr><td class='date'>04-16</td><td>第 2 台流量計讀不到</td><td>線頭重裝;Menu 46 設定後回 26-1 儲存</td><td class='date'>04-19</td></tr><tr><td class='date'>04-16</td><td>變頻器 Modbus illegal address</td><td>0-based 換算</td><td class='date'>04-21</td></tr><tr><td class='date'>04-16</td><td>2 號冰機按鈕異常</td><td>墊片固定</td><td class='date'>04-19</td></tr><tr><td class='date'>04-19</td><td>DI 線路需修改、電阻補齊</td><td>4/29 進廠改線</td><td class='date'>04-29</td></tr><tr><td class='date'>04-17</td><td>冰機警報復歸順序錯置鎖死</td><td>SOP 文件化(先硬體後軟體)</td><td class='date'>04-17</td></tr><tr><td class='date'>05-25</td><td>備機未長時間運轉、壓差偶發、訓練電子檔</td><td>原廠回覆壓差可調;文件 6/23 交付</td><td class='date'>06-23</td></tr><tr><td class='date'>06-01</td><td>冷卻水流量計開機讀 0/跳動</td><td>渦流吸氣;建議 data filter</td><td>移轉遺留清單</td></tr></table></div>"],
+ ["感測器校正 SOP(已建立)","<ul class='tight'><li><b>PT-100 年度校正</b>:停機放水→室溫水桶+參考溫度計→測 3 次取誤差平均→校正後復歸。</li><li><b>替代法(免拆牙口)</b>:於冰機出入口放水取 2L,參考探頭入容器一半以上,3 次採樣於 3 分鐘內;分「24hr 未運轉」與「運轉負載穩定」兩情境。</li><li><b>校正設備</b>:Tecpel DTM-386 + 冠輝 PT100(DIN 1/3)CT121 外牙探頭。</li><li>⚠ 需補:逐感測器校正紀錄表(位號|校正日|誤差|下次到期)。</li></ul>"]],
+ fb:["FAT 兩次(主機+電控盤)都值得,問題在廠內解決成本最低。","單點測試表由業主廠務端同步紀錄,雙方互相勾稽——佳例。","第三方設備的 Modbus 位址基準(0/1-based)、斷電參數保存行為,應在 FAT 就列入測試項。","「連續 30 日運轉」應留自動化運轉數據報表,僅靠聲明在高階甲方不會被接受。"]},
+{id:"07",name:"驗收",en:"Acceptance",
+ purpose:"業主正式確認工程符合合約,完成點交與保固起算。",
+ gate:"驗收紀錄雙方簽認、移交清冊點交完成、保固起算日確定。",
+ docs:[["7-1","驗收申請書","ok","一階 2025-04-25;二階 2026-05-25 結案會議申請"],
+ ["7-2","驗收計畫/程序書","gap","一階以驗收清單代之;二階依 30 日運轉條款"],
+ ["7-3","驗收清單(checklist)","half","一階簽署版 ✅(250725);二階 ⚠ 進行中"],
+ ["7-4","驗收缺失與改善確認","half","一階範例:韌體 bug 請業主硬體支援"],
+ ["7-5","文件移交清冊","half","6/23 Google Drive 交付;⚠ 缺簽收單"],
+ ["7-6","備品/鑰匙/工具移交清單","gap",""],
+ ["7-7","保固書與保固起算通知","gap",""],
+ ["7-8","結案會議紀錄","ok","20260626(功能正常,7/1 起驗收)"],
+ ["7-9","施工後注意事項","ok","一階版"]],
+ extra:[["本案驗收歷程","<ul class='tight'><li><b>一階</b>:2025-04-25 申請 → 6/22 感測器校正完畢啟動驗收 → 7/25 驗收清單雙方簽署 ✅</li><li><b>二階(進行中)</b>:驗收條款 30 日運轉(4/23~5/23 達成)→ 5/25 業主提驗收前待辦 → 6/23 結案文件交付 → 6/26 結案會議,廠長指示 <b>7/1 開始驗收程序</b> → ⚠ 待:二階正式驗收單、驗收缺失紀錄、保固起算通知</li></ul>"],
+ ["文件移交清冊(11 項,均待簽收)","<div class='tblwrap'><table><tr><th>#</th><th>文件</th><th>版本</th><th>簽收</th></tr><tr><td class='num'>1</td><td>完工報告書</td><td>正式版 rev(業主已重整 Rev.A 範本待回填)</td><td>⚠</td></tr><tr><td class='num'>2</td><td>竣工流程圖(機房/二樓)</td><td>V5 final(⚠ 建議補 DWG)</td><td>⚠</td></tr><tr><td class='num'>3</td><td>PLC 圖面</td><td>HW001, 1150424</td><td>⚠</td></tr><tr><td class='num'>4</td><td>冰機微電腦操作手冊</td><td>POL688-M</td><td>⚠</td></tr><tr><td class='num'>5</td><td>冰機操作保養維護手冊</td><td>KLFW</td><td>⚠</td></tr><tr><td class='num'>6</td><td>FC102 變頻器訓練手冊</td><td>v1.1</td><td>⚠</td></tr><tr><td class='num'>7</td><td>MAGNA3 GO 訓練文檔</td><td>修訂版</td><td>⚠</td></tr><tr><td class='num'>8</td><td>冰水系統操作流程</td><td>20260416</td><td>⚠</td></tr><tr><td class='num'>9</td><td>IO 單點測試表</td><td>20260416</td><td>⚠</td></tr><tr><td class='num'>10</td><td>監控點位表/線標表</td><td>20251020 / 20260128</td><td>⚠</td></tr><tr><td class='num'>11</td><td>圖控專案檔(AVEVA Edge)</td><td>FAT 版(⚠ gofile 連結 2/27 過期,確認業主已下載)</td><td>⚠</td></tr></table></div>"],
+ ["驗收後遺留事項(7 項,移交下期)","<div class='tblwrap'><table><tr><th>事項</th><th>建議</th></tr><tr><td>二樓天熱悶熱、除濕力降</td><td>出水溫度下調 11/13°C 觀察;高溫日開加壓泵</td></tr><tr><td>共通管容量僅 3%(ASHRAE 建議 15%)</td><td>主運轉用應更換;備機用可不換,啟動需 5~10 分鐘調整</td></tr><tr><td>2 號水塔組液位不平衡、接觸式液位計</td><td>留意;必要時更換形式</td></tr><tr><td>一樓過冷區</td><td>檢查 sensor 位置、二通閥控制</td></tr><tr><td>SMT 烤爐區過熱(缺口約 14 USRT)</td><td>建議氣冷箱型機補足</td></tr><tr><td>冷卻水流量計開機瞬間讀 0/跳動</td><td>渦流吸氣,系統端 data filter</td></tr><tr><td>冷卻水塔馬達更換</td><td>6/23 提出,會同廠商確認</td></tr></table></div>"]],
+ fb:["量化驗收條款(30 日連續運轉)讓結案有客觀依據——務必寫入合約。","訓練教材與簽到紀錄應在試車階段隨堂交付,不要積到結案。","大檔案雲端交付:連結時效與業主下載確認要留紀錄(本案 gofile 2/27 過期)。","遺留事項要與「驗收合格」明確切分,範圍外的既有限制應書面化由業主簽認。"]},
+{id:"08",name:"成果報告",en:"Closeout & Performance",
+ purpose:"量化證明工程成效(節能案=M&V)、完成維運知識移轉、將專案經驗資產化(實績、範本、教訓)。",
+ gate:"業主收訖成果報告;內部完成案例歸檔與經驗回饋(Lessons Learned)。",
+ docs:[["8-1","完工報告書","ok","正式版 rev(2026-07-03 業主重整為 Rev.A 台積電等級範本+Word 版,待承商回填)"],
+ ["8-2","M&V 節能成效驗證報告","half","改善前基線已完成(2026-07-09 Rev.6,多元迴歸 EnB 模型+雙軌節能量計算式);⚠ 待二階報告期數據與 M&V 報告本體"],
+ ["8-3","竣工圖(As-Built)全套","half","V5、PLC 有;⚠ 單線圖/盤體圖 as-built、DWG 原檔"],
+ ["8-4","操作維護手冊彙編(O&M)","half","設備手冊齊;⚠ 系統級 O&M 總冊"],
+ ["8-5","設備清冊與保固總表","gap",""],
+ ["8-6","感測器校正計畫表","gap","SOP 已有,缺計畫表與紀錄"],
+ ["8-7","告警處理一頁式 SOP","half","復歸流程等存於 email;⚠ 待彙編"],
+ ["8-8","控制邏輯說明書","gap","變頻控制策略、加卸載邏輯未文件化——節能成效核心"],
+ ["8-9","成本結算報告","gap","預算 vs 實際含追加"],
+ ["8-10","遺留問題與下期建議","half","已彙整;建議獨立成冊送業主簽認"],
+ ["8-11","專案經驗回饋(Lessons Learned)","ok","本範本各階段+工程總結報告"],
+ ["8-12","實績證明(業主出具)","gap","驗收完成後申請,投標 Track Record 用"]],
+ extra:[["M&V 報告範本綱要(基線已完成,待報告期)","<ul class='tight'><li><b>方法</b>:建議 IPMVP Option B(改造系統隔離計量——本案已有完整水側感測與電表)或 Option C(全廠計量)。</li><li><b>基線期</b>:✅ 已完成(2026-07-09,Rev.6)——2025-09-01~11-30 修復後一階感測數據;正式基線為多元迴歸模型 B「日 kWh = 0.907×RT·h + 13.19×ECWT − 190.3」(R²=0.956;單變數模型 A 1.0118×RT·h+65.8 併列對照),雙軌節能量計算式已建立,見 <a href='#baseline'>10 能源基線</a>。</li><li><b>報告期</b>:二階完工後(2026-04-23 起)。</li><li><b>正規化因子</b>:外氣溫濕度、生產負載(SMT 投產狀態)。</li><li><b>KPI</b>:kW/RT、冰機 COP、水泵/水塔單位耗電、月用電與電費(同月年對比)。</li><li><b>數據清洗聲明</b>:剔除異常值(如冷卻水流量 >400 渦流干擾)。</li><li><b>結論</b>:實際節能率 vs 初勘承諾值、回收年限實算。</li><li>這份報告同時是向其他客戶展示「泓格產品做節能監控」的最佳案例素材。</li></ul>"],
+ ["控制邏輯說明書(已知設定回填)","<div class='tblwrap'><table><tr><th>項目</th><th>設定值</th><th>理由/出處</th></tr><tr><td>冰機出水溫度</td><td>原 13/15°C;2026-06-26 起測試 11/13°C</td><td>二樓悶熱、除濕不足</td></tr><tr><td>壓縮機啟動溫度</td><td>壓縮機1:11°C 啟動/9°C 設定;壓縮機2:10°C/8°C</td><td>堃霖 2026-04-22</td></tr><tr><td>壓縮機運轉模式</td><td>1 號機雙壓縮機輪替;2 號機單壓縮機</td><td>2025-07-09 會議</td></tr><tr><td>加壓泵啟動條件</td><td>室外 >35°C、濕球 27°C 或高溫黃色燈號</td><td>結案會議</td></tr><tr><td>冰機冰水壓差</td><td>機械式,最小刻度 0.3kg 可調</td><td>堃霖 2026-05-14</td></tr><tr><td>警報復歸 SOP</td><td>先硬體 reset → 復歸頁先上(硬體)後下(軟體)</td><td>堃霖 2026-04-17</td></tr><tr><td>流量資料處理</td><td>data filter;分析前清洗 >400 異常值</td><td>2026-06-01</td></tr></table></div><p style='font-size:13.5px'>⚠ 變頻器頻率控制策略(定壓差?定溫差?)、冰機加卸載邏輯、排程——節能核心,請自控制程式與普立捷/理頓文件補齊。</p>"],
+ ["案例資產化(給泓格與 SI 的建議)","<ul class='tight'><li><b>商業價值</b>:全套泓格產品+第三方設備整合的節能實績;補上 M&V 即是面向高階甲方的完整案例。</li><li><b>產品回饋</b>:I-87051W Source/PNP 接線認知、資料接收模組韌體 bug、GW-100-LRS 缺貨等應回饋泓格產品/FAE 團隊建立 FAQ。</li><li><b>下一案複製</b>:泓格二廠(同日現勘)為現成下一案;二廠圖控干擾經驗之抗干擾需求已在本案定型。</li></ul>"]],
+ fb:[]},
+];
+
+const GAPS=[
+{g:"01_現勘",items:["現勘紀錄表(結構化:銘牌/量測值/照片編號)","現勘照片冊(施工前現況存證)","能源基線報告正式歸檔——✅ 已完成(2026-07-09 改善前基線 Rev.6),可勾銷","現勘安全告知/入廠申請(高階甲方必備)","現勘計畫書之安全需求欄(入廠管制、PPE)","初勘報告效益初估數值摘出歸檔(節電量、回收年限)"]},
+{g:"02_設計",items:["設計需求書(Basis of Design)正式成文","負載計算書(分區負載統計)","水力計算書(管徑、揚程、平衡)","設計變更紀錄表(V3→V4→V5 差異對照)","規範書 Specification(CNS/ASME/ASHRAE 引用)","圖號編碼原則與版次變更對照表","設計電壓基準決策結論明載(Decision Log)"]},
+{g:"03_報價",items:["數量計算書","單價分析表(PC 表)","付款條件與里程碑","各版本報價金額與最終合約金額補登"]},
+{g:"04_合約",items:["保固條款/各設備保固起訖彙整","履約保證金/銀行保函","保險證明(營造綜合險、雇主責任、第三人責任)","承攬商工安切結/危害告知簽認","分包商清冊與資格文件","逾期罰則/趕工條款(查合約本文)","保固起算日書面化","開工前置:保證/保險/證照文件補齊"]},
+{g:"05_施工",items:["施工日報(高階甲方要求)","材料送審追蹤表(Submittal Log)","工安文件(動火/高架許可、TBM)","變更/追加申請與追蹤表","施工照片成冊(前/中/後)","管路試壓正式測試報告","主電絕緣測試紀錄表單","保溫施工檢驗紀錄","追加項目金額、核准紀錄與追加減總表"]},
+{g:"06_試車",items:["試車計畫書","功能測試報告(2 號機故障測試結果)","TAB 報告(測試調整平衡)","缺失改善追蹤表 Punch List 正式表","連續 30 日運轉數據佐證(監控報表)","教育訓練簽到表與訓練紀錄","感測器逐點校正紀錄表"]},
+{g:"07_驗收",items:["驗收計畫/程序書","二階正式驗收清單(簽署版)","文件移交清冊簽收單","備品/鑰匙/工具移交清單","保固書與保固起算通知","二階驗收缺失紀錄","圖控專案檔業主下載留存確認"]},
+{g:"08_成果報告",items:["M&V 節能成效驗證報告(改善前基線已完成 2026-07-07;待二階報告期數據)","竣工圖 as-built 補全(單線圖、盤體圖、DWG 原檔)","系統級 O&M 總冊彙編","設備清冊與保固總表","感測器校正計畫表","告警處理一頁式 SOP 彙編","控制邏輯說明書(變頻策略、加卸載邏輯)","成本結算報告(預算 vs 實際含追加)","遺留問題清單獨立成冊送業主簽認","實績證明(業主出具)"]},
+];
+const GAP_KEY="icpdas-f1-gaps";
+
+/* ============ 路由與渲染 ============ */
+const NAVDEF=[["overview","總覽",""],["timeline","時程",""],["problems","問題",""],
+ ...STAGES.map(s=>["s"+s.id,s.name,s.id]),
+ ["partners","合作夥伴遴選","09"],["baseline","能源基線","10"],
+ ["gaps","待補追蹤",""],["help","使用說明",""]];
+const $=s=>document.querySelector(s);
+const esc=t=>t.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+
+function navHTML(cur){
+  const grp=(t)=>`<div class="navgrp">${t}</div>`;
+  let h=grp("導覽");
+  for(const[id,label,num]of NAVDEF){
+    if(id==="s01")h+=grp("階段文件 01–08");
+    if(id==="partners")h+=grp("延伸主題 09–10");
+    if(id==="gaps")h+=grp("追蹤");
+    h+=`<a href="#${id}" class="${cur===id?'on':''}" ${cur===id?'aria-current="page"':''}>${num?`<span class="num">${num}</span>`:""}${label}</a>`;
+  }
+  return h;
+}
+function mnavHTML(cur){
+  return NAVDEF.map(([id,label,num])=>`<a href="#${id}" class="${cur===id?'on':''}">${num?num+" ":""}${label}</a>`).join("");
+}
+
+function stageStats(s){let ok=0,half=0,gap=0;for(const d of s.docs){if(d[2]==="ok")ok++;else if(d[2]==="half")half++;else gap++;}return{ok,half,gap};}
+function gapState(){try{return JSON.parse(localStorage.getItem(GAP_KEY)||"{}")}catch(e){return{}}}
+function gapCounts(){const st=gapState();let total=0,done=0;for(const g of GAPS){for(let i=0;i<g.items.length;i++){total++;if(st[g.g+"|"+i])done++;}}return{total,done};}
+
+/* ---- 總覽 ---- */
+function vOverview(){
+  const gc=gapCounts();
+  const cards=STAGES.map(s=>{const t=stageStats(s);return `
+    <a href="#s${s.id}" style="text-decoration:none;color:inherit">
+    <div class="card" style="margin:0;height:100%">
+      <div style="font-size:12px;color:var(--ink2);letter-spacing:.1em">STAGE ${s.id}</div>
+      <div style="font-weight:800;font-size:16px;color:var(--teal-dk)">${s.name}<span style="font-weight:400;color:var(--ink2);font-size:12px"> ${s.en}</span></div>
+      <div style="margin-top:6px;font-size:12.5px"><span class="b ok">✅ ${t.ok}</span> <span class="b half">◐ ${t.half}</span> <span class="b gap">⚠ ${t.gap}</span></div>
+    </div></a>`;}).join("");
+  return `
+  <div class="eyebrow">Project Dashboard</div>
+  <h1>泓格一廠空調節能改善暨冰水系統汰換工程</h1>
+  <div class="sub">新竹湖口 · 2024-10 現勘 → 2025 一階感測建置 → 2026 二階冰水系統汰換 → <b style="color:var(--amber)">2026-07-01 起驗收程序進行中</b></div>
+  <div class="grid g4">
+    <div class="stat"><div class="k">時程事件</div><div class="v">${TL.length}</div><div class="n">4 個時期</div></div>
+    <div class="stat"><div class="k">問題與解決</div><div class="v">${PROBS.length}</div><div class="n">全程對照表</div></div>
+    <div class="stat"><div class="k">階段文件範本</div><div class="v">8</div><div class="n">現勘 → 成果報告</div></div>
+    <div class="stat"><div class="k">改善前基線能效</div><div class="v">1.069</div><div class="n">kW/RT(COP 3.29)→ <a href="#baseline">能源基線</a></div></div>
+    <div class="stat"><div class="k">待補事項</div><div class="v warn">${gc.done} / ${gc.total}</div><div class="n">已完成 / 總數 → <a href="#gaps">追蹤</a></div></div>
+  </div>
+  <h2>專案角色</h2>
+  <div class="card"><div class="tblwrap"><table>
+    <tr><th style="width:120px">業主</th><td>泓格科技(傅國鈞廠長、游尚明 Cony、邱奕隆 Aaron、Evanna Lin)</td></tr>
+    <tr><th>承商</th><td>理頓實業/泓文能源(施泓光 Hunter)</td></tr>
+    <tr><th>協力</th><td>堃霖(冰水主機 KLFW-160DV)、普立捷(自控/動力,楊副理)、呈輝(電控盤)、簡老師(技術顧問)、泓格高雄 FAE</td></tr>
+    <tr><th>監控系統</th><td>泓格自有:iP-8841 PAC、I-87051W、PM-4324A 電表、NS-205A/208A/216、GW-100-LRS;圖控 AVEVA Edge</td></tr>
+  </table></div></div>
+  <h2>八階段文件狀態</h2>
+  <div class="grid g2">${cards}</div>
+  <h2>延伸主題(09–10)</h2>
+  <div class="grid g2">
+    <a href="#partners" style="text-decoration:none;color:inherit"><div class="card" style="margin:0;height:100%">
+      <div style="font-size:12px;color:var(--ink2);letter-spacing:.1em">09 節能產業的合作夥伴</div>
+      <div style="font-weight:800;font-size:16px;color:var(--teal-dk)">合作夥伴遴選<span style="font-weight:400;color:var(--ink2);font-size:12px"> Partner Program</span></div>
+      <div style="margin-top:6px;font-size:13px;color:var(--ink2)">遴選標準與 SOP、評分表(門檻 75 分)· 2026-07-07</div>
+    </div></a>
+    <a href="#baseline" style="text-decoration:none;color:inherit"><div class="card" style="margin:0;height:100%">
+      <div style="font-size:12px;color:var(--ink2);letter-spacing:.1em">10 能源基線報告</div>
+      <div style="font-weight:800;font-size:16px;color:var(--teal-dk)">改善前能源基線<span style="font-weight:400;color:var(--ink2);font-size:12px"> Energy Baseline</span></div>
+      <div style="margin-top:6px;font-size:13px;color:var(--ink2)">1.069 kW/RT · 多元迴歸 EnB 模型(含 ECWT)· 資料修復與驗證 · Rev.6(2026-07-09)</div>
+    </div></a>
+  </div>
+  <h2>最新動態</h2>
+  <div class="card" style="font-size:14px">
+    <ul class="tight">
+      <li><b>2026-07-09</b> 能源基線報告 <b>Rev.6</b> 完成:依 Manus/Gemini/ChatGPT 對 Rev.5 之交叉審查修訂(估算比例三分母、殘差診斷、ECWT 決策表、具名簽核、可追溯性雜湊、附錄 D);檔名改 202509-202511 → <a href="#baseline">10 能源基線</a>。</li>
+      <li><b>2026-07-08</b> 能源基線報告 <b>Rev.5</b>:採納節能廠商意見,以冷凝器進水溫(ECWT)為第二相關變數,正式基線改為<b>多元迴歸模型 B</b>(日 kWh=0.907×RT·h+13.19×ECWT−190.3,R²=0.956),單變數模型 A 併列對照 → <a href="#baseline">10 能源基線</a>。</li>
+      <li><b>2026-07-08</b> 能源基線報告 Rev.4:第二輪三方文件/程式/報告一致性審查(統計數字不變),並新增《技術說明》《SOP》開發維護文件。</li>
+      <li><b>2026-07-07</b> 改善前能源基線報告 Rev.3 完成(EnB 模型、補值工具、三方 AI 審查整合)。</li>
+      <li><b>2026-07-07</b> HVAC 節能合作夥伴遴選標準與 SOP、評分表編製完成 → <a href="#partners">09 合作夥伴遴選</a>。</li>
+      <li><b>2026-07-03</b> 完工報告書業主重整為台積電等級範本 Rev.A(Word 版),交承商回填 ⚠ 缺漏後出 Rev.B。</li>
+      <li><b>2026-07-01</b> 驗收程序啟動(廠長 6/26 結案會議指示)。</li>
+      <li><b>結案前最大缺口</b>:M&V 報告本體(基線已備)、追加減帳總表、Punch List 正式表、TAB 報告、合約金額與付款里程碑 → 見 <a href="#gaps">待補追蹤</a>。</li>
+    </ul>
+  </div>
+  <div class="foot">資料正本:Obsidian 筆記庫 <span class="kbd">08_報告與SI範本</span>(10 份 md)+ <span class="kbd">09_節能產業的合作夥伴</span> + <span class="kbd">10_能源基線報告</span> · 本頁由 Claude 產生(2026-07-09)· md 更新後請依 CLAUDE任務紀錄.md 流程重新發布</div>`;
+}
+
+/* ---- 時程 ---- */
+let tlFilter=0;
+function vTimeline(){
+  const chips=PERIODS.map((p,i)=>`<button class="chip ${tlFilter===i?'on':''}" onclick="tlFilter=${i};render()">${p}</button>`).join("");
+  const evs=TL.filter(e=>tlFilter===0||e.p===tlFilter).map(e=>`
+    <div class="ev ${e.m?'mile':''}"><span class="d">${e.d}</span><span class="pl">${PERIODS[e.p].split("(")[0]}</span><div>${esc(e.t)}</div></div>`).join("");
+  return `<div class="eyebrow">Timeline</div><h1>工程時程</h1>
+  <div class="sub">${TL.length} 個事件 · <span style="color:var(--amber)">●</span> 橘點為關鍵里程碑</div>
+  <div class="searchbar">${chips}</div>
+  <div class="card"><div class="tl">${evs}</div></div>`;
+}
+
+/* ---- 問題 ---- */
+let probQ="",probS="全部";
+function vProblems(){
+  const tags=["全部",...new Set(PROBS.map(p=>p.s))];
+  const chips=tags.map(t=>`<button class="chip ${probS===t?'on':''}" onclick="probS='${t}';render()">${t}</button>`).join("");
+  const list=PROBS.map((p,i)=>({...p,i})).filter(p=>(probS==="全部"||p.s===probS)&&(!probQ||(p.q+p.w+p.f).includes(probQ)));
+  const cards=list.map(p=>`
+   <div class="card prob"><h3>#${p.i+1} ${esc(p.q)} <span class="b stage">${p.s}</span></h3>
+   <div class="row"><div class="lab">原因</div><div>${esc(p.w)}</div><div class="lab">解決</div><div>${esc(p.f)}</div></div></div>`).join("")||`<div class="card">沒有符合的結果。</div>`;
+  return `<div class="eyebrow">Issues & Resolutions</div><h1>問題與解決方式</h1>
+  <div class="sub">全案 ${PROBS.length} 項問題對照(出處:00_工程總結報告 §4)</div>
+  <div class="searchbar"><input type="search" placeholder="搜尋問題、原因、解決方式…" value="${esc(probQ)}"
+    oninput="probQ=this.value;renderKeep(this)">${chips}</div>${cards}`;
+}
+
+/* ---- 階段 ---- */
+function vStage(s){
+  const t=stageStats(s);
+  const rows=s.docs.map(d=>`<tr><td class="num">${d[0]}</td><td><b>${esc(d[1])}</b></td><td>${ST[d[2]]}</td><td>${esc(d[3]||"")}</td></tr>`).join("");
+  const extras=(s.extra||[]).map(([ti,html])=>`<details><summary>${ti}</summary><div class="inner">${html}</div></details>`).join("");
+  const fb=s.fb&&s.fb.length?`<h2>經驗回饋(供未來專案)</h2><div class="card"><ul class="tight">${s.fb.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`:"";
+  const prev=STAGES.find(x=>+x.id===+s.id-1),next=STAGES.find(x=>+x.id===+s.id+1);
+  return `<div class="eyebrow">Stage ${s.id} · ${s.en}</div><h1>階段${["","一","二","三","四","五","六","七","八"][+s.id]}:${s.name}</h1>
+  <div class="sub"><span class="b ok">✅ ${t.ok}</span> <span class="b half">◐ ${t.half}</span> <span class="b gap">⚠ ${t.gap}</span>(共 ${s.docs.length} 份應備文件)</div>
+  <div class="gatebox">
+    <div class="card"><div class="h">階段目的</div><div style="font-size:14px">${esc(s.purpose)}</div></div>
+    <div class="card"><div class="h">通過條件(Gate)</div><div style="font-size:14px">${esc(s.gate)}</div></div>
+  </div>
+  <h2>應具備文件清單</h2>
+  <div class="tblwrap"><table><tr><th style="width:46px">#</th><th style="width:230px">文件</th><th style="width:110px">本案現況</th><th>說明</th></tr>${rows}</table></div>
+  ${extras?`<h2>重點內容</h2>${extras}`:""}${fb}
+  <div class="foot">${prev?`← <a href="#s${prev.id}">階段 ${prev.id} ${prev.name}</a>`:""} &nbsp; ${next?`<a href="#s${next.id}">階段 ${next.id} ${next.name}</a> →`:""} &nbsp;·&nbsp; 完整內容見 Obsidian:<span class="kbd">08_報告與SI範本/${s.id}_${s.name}階段文件.md</span></div>`;
+}
+
+/* ---- 待補追蹤 ---- */
+function vGaps(){
+  const st=gapState(),gc=gapCounts();
+  const pct=gc.total?Math.round(gc.done/gc.total*100):0;
+  const grps=GAPS.map(g=>{
+    let done=0;
+    const items=g.items.map((it,i)=>{
+      const id=g.g+"|"+i,on=!!st[id];if(on)done++;
+      return `<label class="gap-item ${on?'done':''}"><input type="checkbox" ${on?'checked':''} onchange="toggleGap('${id}')"><span class="t">${esc(it)}</span></label>`;
+    }).join("");
+    const gp=Math.round(done/g.items.length*100);
+    return `<div class="gap-grp"><div class="gh"><b>${g.g}</b><div class="bar"><i style="width:${gp}%"></i></div><span class="pct">${done}/${g.items.length}(${gp}%)</span></div>${items}</div>`;
+  }).join("");
+  return `<div class="eyebrow">Gap Tracker</div><h1>待補事項追蹤</h1>
+  <div class="sub">結案前需補齊之文件與紀錄(出處:各階段文件「⚠ 需要補充」標記)。勾選狀態儲存於本機瀏覽器,重新發布網頁不會清除。</div>
+  <div class="card"><div class="gh" style="display:flex;align-items:center;gap:12px"><b style="font-size:16px">整體進度</b><div class="bar"><i style="width:${pct}%"></i></div><span class="pct">${gc.done}/${gc.total}(${pct}%)</span></div></div>
+  <div class="note"><b>結案前優先</b>:M&V 報告本體(改善前基線已於 2026-07-07 完成)、追加減帳總表、Punch List 正式表、TAB 報告、合約金額與付款里程碑(00_使用說明 §5)。</div>
+  ${grps}`;
+}
+function toggleGap(id){const st=gapState();if(st[id])delete st[id];else st[id]=1;localStorage.setItem(GAP_KEY,JSON.stringify(st));render();}
+
+/* ---- 使用說明 ---- */
+function vHelp(){
+  return `<div class="eyebrow">Guide</div><h1>使用說明與文件架構</h1>
+  <div class="sub">這套範本以本案為實際案例,定義空調節能/監控整合工程 8 階段應備文件,供泓格配合之 SI 承接高階製造業甲方(台積電等級)工程使用。</div>
+  <h2>一般業主 vs 台積電等級甲方</h2>
+  <div class="tblwrap"><table><tr><th>面向</th><th>一般業主</th><th>台積電等級甲方</th></tr>
+  <tr><td>文件管控</td><td>有交付即可</td><td>文件編號、版次(Rev.)、送審/核准流程(Submittal)、變更需重新送審</td></tr>
+  <tr><td>品質</td><td>完工能動</td><td>ITP、Hold Point/Witness Point、自主檢查表、材料出廠證明與送審</td></tr>
+  <tr><td>工安(ESH)</td><td>口頭提醒</td><td>承攬商評鑑、危害告知、工安計畫、動火/高架/局限空間許可、證照與保險、工安日誌</td></tr>
+  <tr><td>時程</td><td>大概日期</td><td>基準時程(Baseline)、週進度對照、延誤分析與趕工計畫</td></tr>
+  <tr><td>變更</td><td>口頭追加</td><td>變更申請單(核准後施作)、追加減帳對照表</td></tr>
+  <tr><td>驗收</td><td>點交</td><td>分段驗收(FAT/SAT/SIT)、Punch List 歸零、移交清冊、保固書面化</td></tr>
+  <tr><td>成效</td><td>完工報告</td><td>量化 KPI 驗證(節能案要 M&V)、遺留風險揭露</td></tr></table></div>
+  <h2>範本使用方式</h2>
+  <div class="card"><ul class="tight">
+  <li><b>新專案啟動</b>:複製整個資料夾,將「本案填寫內容」清空,依欄位逐項填寫。</li>
+  <li><b>文件編號</b>:<span class="kbd">{類別}-{專案代號}-{流水號}</span>,例 ITP-TSMC-F18-001;每份文件需版次與版本紀錄表。</li>
+  <li><b>⚠ 需要補充的處理</b>:每週專案會議檢視,結案前全數關閉(填入內容或書面說明不適用原因)。</li>
+  <li><b>與甲方文管對接</b>:送審狀態以送審追蹤表(Submittal Log)管理(見階段 05)。</li></ul></div>
+  <h2>本網頁的更新方式</h2>
+  <div class="card"><ul class="tight">
+  <li>資料正本是 Obsidian 的 <span class="kbd">08_報告與SI範本</span>(10 份 md)與 <span class="kbd">09_節能產業的合作夥伴</span>、<span class="kbd">10_能源基線報告</span>;本頁<b>不會自動同步</b>。</li>
+  <li>md 更新後,開啟 Claude Code 並下指令(務必附上本頁網址):「我已更新報告與SI範本的 md 檔,請先讀 CLAUDE任務紀錄.md,然後重新產生互動式網頁,更新到 <b>本頁網址</b>」。</li>
+  <li>重新發布後網址不變,瀏覽器重新整理即為新版;待補追蹤的勾選狀態存於瀏覽器,不會被清除。</li></ul></div>
+  <div class="foot">文件索引:00_使用說明與文件架構 · 00_工程總結報告 · 01_現勘 ~ 08_成果報告階段文件 · 09 合作夥伴遴選(SOP+評分表)· 10 能源基線報告(總覽+任務紀錄+技術說明+SOP+補值工具說明+兩輪審查)</div>`;
+}
+
+/* ---- 09 合作夥伴遴選 ---- */
+function vPartners(){
+  return `<div class="eyebrow">Partner Program · 09</div><h1>節能產業的合作夥伴 — 遴選標準與評分</h1>
+  <div class="sub">泓格具備控制器/IIoT/量測硬體能力,但缺乏冷凍空調工程技師簽證與合格能源管理人員(建築法第13條、能源管理法規要求)。以遴選制度結盟 ESCO 與技師事務所,共同推動 HVAC 節能市場。(文件:HVAC_Partner_Selection_Criteria_SOP、Evaluation_Scorecard,2026-07-07)</div>
+  <h2>基本資格(必要條件,任一不符即終止評估)</h2>
+  <div class="tblwrap"><table><tr><th style="width:130px">資格項目</th><th>具體要求</th><th style="width:170px">驗證文件</th></tr>
+  <tr><td><b>合法登記</b></td><td>經濟部商業司合法公司登記,無不良停業紀錄</td><td>公司登記證明</td></tr>
+  <tr><td><b>專業證照</b></td><td>甲級(資本額≥2,000萬)或乙級(≥500萬)冷凍空調業登記</td><td>冷凍空調業登記證書</td></tr>
+  <tr><td><b>技師簽證</b></td><td>聘有專任冷凍空調工程技師,或與技師事務所長期合作契約</td><td>技師執業執照/合作契約</td></tr>
+  <tr><td><b>能源管理</b></td><td>具經濟部能源署認可之合格能源管理人員</td><td>能源管理人員合格證書</td></tr>
+  <tr><td><b>公會資格</b></td><td>建議為能源技術服務公會或冷凍空調技師公會會員</td><td>公會會員證書</td></tr></table></div>
+  <h2>綜合評估(總分 100,合格門檻 75;≥85 列首選)</h2>
+  <div class="tblwrap"><table><tr><th style="width:220px">評估維度</th><th style="width:60px">權重</th><th>子項目(配分)</th></tr>
+  <tr><td><b>一、技術能力與專業證照</b></td><td class="num">35%</td><td>技師陣容(15)· 系統整合能力:ICPDAS WinPAC/Modbus/OPC UA 整合實績(10)· 能效評估能力:BERS、EnergyPlus 模擬(10)</td></tr>
+  <tr><td><b>二、公司規模與財務穩定性</b></td><td class="num">20%</td><td>資本額與營業規模(10)· 財務健康度:近三年報表、退票、負債比(10)</td></tr>
+  <tr><td><b>三、服務模式與業務覆蓋</b></td><td class="num">20%</td><td>服務完整性:診斷→設計→採購→監造→TAB→維保(10)· 地理覆蓋與售後響應(10)</td></tr>
+  <tr><td><b>四、過往實績與商譽</b></td><td class="num">25%</td><td>專案經驗:五年內 HVAC 節能案數量/規模/業種(15)· 節能成效與 M&V 驗證、業主推薦(10)</td></tr></table></div>
+  <h2>遴選 SOP(五階段)</h2>
+  <div class="tblwrap"><table><tr><th style="width:46px">#</th><th style="width:210px">階段</th><th style="width:80px">時程</th><th>重點</th></tr>
+  <tr><td class="num">1</td><td>需求確認與市場盤點</td><td class="num">1–2 週</td><td>確立目標市場;經公會名錄/招標資訊/推薦篩出 10–15 家</td></tr>
+  <tr><td class="num">2</td><td>初步篩選與資格審查</td><td class="num">1–2 週</td><td>發意向書+資格審查表;法務/專案部門審核 → 短名單 5–8 家</td></tr>
+  <tr><td class="num">3</td><td>深度評估與面談</td><td class="num">2–3 週</td><td>財報/團隊履歷/案例報告;遴選委員會實地訪查+簡報評分</td></tr>
+  <tr><td class="num">4</td><td>遴選決策與合約協商</td><td class="num">1–2 週</td><td>≥75 分且前 2–3 名;協商合作模式與權責分工 → 簽 MOU</td></tr>
+  <tr><td class="num">5</td><td>合作啟動與績效考核</td><td class="num">持續</td><td>技術培訓、聯合行銷;年度考核決定次年合作等級</td></tr></table></div>
+  <h2>評分表決議與策略建議</h2>
+  <div class="gatebox">
+    <div class="card"><div class="h">合作等級(評分委員會決議)</div><ul class="tight" style="font-size:14px"><li><b>甲級合作夥伴</b>:優先合作、專案保護與價格優惠(≥85 分)</li><li><b>乙級合作夥伴</b>:一般合作、按案件協商(75–84 分)</li><li><b>試點合作</b>:試行 1–2 案後再評估</li><li>&lt;75 分:不予合作或改善後重評</li></ul></div>
+    <div class="card"><div class="h">給總經理的三項建議</div><ul class="tight" style="font-size:14px"><li><b>雙軌並行</b>:大型 ESCO 主攻指標性公共工程;中小型技師事務所拓展中小企業市場</li><li><b>認證夥伴制度</b>:通過遴選+完成培訓者列 Certified Partner,強化黏著度</li><li><b>本季啟動首波遴選</b>,建立首批示範案例</li></ul></div>
+  </div>
+  <div class="foot">資料正本:<span class="kbd">09_節能產業的合作夥伴</span>(md+Word)· 評分委員:總經理室/專案發展部/技術研發部,委員間差異 &gt;10 分需討論後重評 · 一廠實績(含 <a href="#baseline">能源基線</a>)為對外招募與展示素材</div>`;
+}
+
+/* ---- 10 能源基線 ---- */
+function vBaseline(){
+  return `<div class="eyebrow">Energy Baseline · 10</div><h1>能源基線報告(改善前)— Rev.6</h1>
+  <div class="sub">二階冰水系統汰換的<b>改善前基線</b>:2025-09-01 ~ 11-30(91 天/運轉日 75 天),一階感測器 1 分鐘採集數據修復後編製。依 ISO 50001:2018、ISO 50006:2023、IPMVP(Option B 架構)、ASHRAE G14-2023、FEMP M&V Guidelines v5.0。Rev.3(2026-07-07,三方 AI 審查)→ Rev.4(2026-07-08,文件/程式/報告一致性)→ <b>Rev.5</b>(2026-07-08,採納節能廠商意見,以冷凝器進水溫 ECWT 為第二變數改用多元迴歸)→ <b>Rev.6</b>(2026-07-09,依 Manus/Gemini/ChatGPT 對 Rev.5 之交叉審查修訂)。</div>
+  <div class="grid g4">
+    <div class="stat"><div class="k">系統基線能效 EnPI-1</div><div class="v">1.069</div><div class="n">kW/RT(COP 3.29,加權)</div></div>
+    <div class="stat"><div class="k">主機基線能效 EnPI-2</div><div class="v">0.732</div><div class="n">kW/RT(COP 4.81)</div></div>
+    <div class="stat"><div class="k">期間總用電</div><div class="v">78,253</div><div class="n">kWh(待機占 1.5%)</div></div>
+    <div class="stat"><div class="k">期間總冷凍量</div><div class="v">72,006</div><div class="n">RT·h(運轉 969.6 h)</div></div>
+  </div>
+  <h2>能源基線模型(EnB)</h2>
+  <div class="card"><div style="font-size:12px;letter-spacing:.1em;color:var(--teal);font-weight:700">正式基線 · 模型 B(多元迴歸)</div>
+  <div style="font-size:17px;font-weight:800;color:var(--teal-dk);font-variant-numeric:tabular-nums;margin-top:2px">日用電量 (kWh) = 0.907 × 日冷凍量 (RT·h) + 13.19 × ECWT − 190.3</div>
+  <div style="font-size:13.5px;color:var(--ink2);margin-top:6px">迴歸樣本 n=72 · R²=0.956 · 調整後 R²=0.955 · CV(RMSE)=9.26%(留一法 9.42%)· ECWT 係數 p=0.001(t=3.43)顯著 · VIF≈2.4 無共線性 · ECWT 適用 15.5~32.6°C。ECWT=冷凝器進水溫(冷卻水回主機溫度),涵蓋冷卻水溫(天候)對主機效率之直接影響。</div>
+  <div style="font-size:13.5px;color:var(--ink2);margin-top:8px"><b>對照 · 模型 A(單變數)</b>:日用電量 = 1.0118 × RT·h + 65.8(n=72,R²=0.949,CV=9.95%,留一法 10.09%,適用 83~1,556 RT·h)。納入 ECWT 後 CV(RMSE) 由 9.95% 降至 9.26%、調整後 R² 上升。</div>
+  <div style="font-size:13.5px;margin-top:8px"><b>節能量計算式(改善後適用,雙軌)</b>:以模型 B 為主、模型 A 為對照,節能量 = Σ逐日 [基線模型預測日用電] − 報告期各運轉日實際用電;須沿用相同量測點、RT 計算式、有效分鐘定義(RT&gt;5)與 1 分鐘頻率。<b>⚠ 若改善措施會改變 ECWT(冷卻塔/冷卻水泵/冷卻水控制),不可直接以改善後 ECWT 代入模型 B 正規化(會低估節能量),應改用模型 A 或獨立濕球模型</b>。</div></div>
+  <h2>月別摘要與負載</h2>
+  <div class="tblwrap"><table><tr><th>月份</th><th>總用電 kWh</th><th>冷凍量 RT·h</th><th>系統 kW/RT</th><th>主機 kW/RT</th><th>平均負載 RT</th></tr>
+  <tr><td class="date">2025-09</td><td class="num">36,197</td><td class="num">32,204</td><td class="num">1.113</td><td class="num">0.839</td><td class="num">93.0</td></tr>
+  <tr><td class="date">2025-10</td><td class="num">25,150</td><td class="num">23,954</td><td class="num">1.031</td><td class="num">0.707</td><td class="num">76.3</td></tr>
+  <tr><td class="date">2025-11</td><td class="num">16,906</td><td class="num">15,849</td><td class="num">1.039</td><td class="num">0.550</td><td class="num">49.9</td></tr></table></div>
+  <div class="note" style="margin-top:12px"><b>第一優先改善機會</b>:低負載(&lt;60 RT)時能效明顯惡化——定速泵浦固定耗電約 26 kW,11 月泵浦占系統用電 46%,主機涼季節電幾乎被定速輔機抵銷 → <b>冰水/冷卻水泵浦變頻化+溫差/壓差控制</b>。用電組成:主機 68.8% / 泵浦 30.7% / 水塔 0.5%;負載 P50=73、P90=111、P99=122 RT。</div>
+  <h2>重點內容</h2>
+  <details><summary>相關變數辨識與多元迴歸(Rev.5 新增,正式基線模型 B)</summary><div class="inner">
+  <p style="font-size:13.5px">依 ASHRAE G14 / IPMVP / FEMP 之相關變數辨識:主機耗電除受<b>冷凍負載</b>影響外,亦受<b>冷凝側溫度</b>顯著影響(冷卻水溫愈高、壓縮揚程愈大、效率愈差)。以現場既有之冷凝器進水溫(ECWT)為第二變數,建立多元迴歸為正式基線。三模型以同一 n=72 樣本比較:</p>
+  <div class="tblwrap"><table><tr><th>模型</th><th>方程式</th><th>R²</th><th>CV(RMSE)</th><th>留一法</th></tr>
+  <tr><td>A(對照,同樣本)</td><td>1.0118×RT·h + 65.8</td><td>0.949</td><td>9.95%</td><td>10.09%</td></tr>
+  <tr style="background:#E7EFF2;font-weight:700"><td>B(正式)</td><td>0.907×RT·h + 13.19×ECWT − 190.3</td><td>0.956</td><td>9.26%</td><td>9.42%</td></tr>
+  <tr><td>C(佐證)</td><td>0.859×RT·h + 17.30×lift − 76.9</td><td>0.961</td><td>8.78%</td><td>8.96%</td></tr></table></div>
+  <p style="font-size:13.5px">lift=ECWT−冰水出水溫,為冷凝側與蒸發側<b>水溫差之簡化代理指標</b>(非冷媒實際壓縮飽和溫度 lift);模型 C 統計最佳但解釋須多一層,故採 ECWT 之模型 B 為正式基線、C 僅佐證。ECWT 係數解讀:<b>在相同日冷凍量下</b>,ECWT 每升高 1°C,預測日用電增加約 13.2 kWh。兩自變數相關 r=0.76、VIF≈2.4,無顯著共線性。</p>
+  <p style="font-size:13.5px;color:var(--ink2)"><b>殘差診斷</b>:模型 B 之 Durbin–Watson≈1.09(日殘差存在正一階自相關,每日資料常見),隨機留一法可能偏樂觀;改以<b>逐月分塊交叉驗證</b>(每次留一整月)得 CV(RMSE)≈14.97%,反映跨季節(高/低負載月)外推之較大不確定度,作為節能量不確定度參考。圖 7 右圖採<b>樣本外(留一法)</b>殘差,避免將「含截距 OLS 之樣本內殘差必與 ECWT 正交」之數學必然當作獨立驗證。</p></div></details>
+  <details><summary>資料修復(HVAC_GapFiller.py)— 診斷與規則</summary><div class="inner">
+  <div class="tblwrap"><table><tr><th style="width:230px">資料問題(依嚴重度)</th><th>修復規則(註記代碼)</th></tr>
+  <tr><td><b>假斜坡</b>:每次啟停被抹成 1~3 小時緩慢線性爬升/下降(四個月 157 段、約 3.1 萬分鐘;匯出平滑產生的假資料)</td><td>真實啟停時刻=斜坡起點(水溫拐點、~06:00 作息、假日停機佐證);啟動 1~3 分鐘內快速到位、停機快速降為停機值(斜坡銳化)</td></tr>
+  <tr><td>每 2 小時固定缺 1 分鐘(XX:46)</td><td>同運轉區塊內線性內插(內插)</td></tr>
+  <tr><td>9/1~9/3 主機電力整段缺漏;月頭 00:00~01:47 缺漏</td><td>流量判啟停,主機 kW=0.803×RT+3.64(同月擬合);泵浦/水塔用運轉中位數(模型估算)/停機補0</td></tr>
+  <tr><td>2 號機流量計負值漂移(−29~−36);2 號機 9~11 月未運轉</td><td>歸零(負值歸零)</td></tr>
+  <tr><td>工廠非 24 小時;8/1~8/26 無任何紀錄</td><td>停機補停機值,不虛構運轉資料</td></tr></table></div>
+  <p style="font-size:13.5px"><b>自我驗證(--validate)全數通過</b>:與三張 9 月儀表板截圖時間窗平均比對,判定門檻 ±20%、實際全數 ±10% 內(主機能效偏差 0.8~3.0%);物理規則(無缺漏、停機流量 0、啟動 3 分鐘內達 80%、無負值、修復前後月用電差 4.8%)通過。</p></div></details>
+  <details><summary>三方 AI 審查整合(Rev.3)— 17 項逐項查證</summary><div class="inner">
+  <ul class="tight" style="font-size:13.5px">
+  <li>採納並修正:公式精度統一 1.0118x+65.8(重製圖 5)、工具備援參數同步 0.803/3.64、圖 1 占比一位小數、天候變數防禦性說明、出水溫度條款語意(節能手段不觸發基線調整)、修復透明化、2 號機角色、分鐘級模型定位、±10%/±20% 門檻敘明、重製圖 3(P99 標註)等。</li>
+  <li><b>2 項查證後不成立</b>:n 應為 71 之推測(實為 72——估算日 9/1~9/3 共 3 天)、附錄 A「估」欄異常之誤讀(實為低負載週六 kW/RT)。</li>
+  <li>查證過程另發現 9/4 上午 25% 分鐘為區塊內插 → 敏感度檢驗:再排除 9/4 後斜率僅差 0.6%,模型穩健。</li></ul>
+  <p style="font-size:13.5px;color:var(--ink2)">經驗:多方 AI 審查意見須逐項查證再採納;驗證比對用儀表板 Mean(時間窗平均)比 Last(30 秒瞬時)可靠。</p></div></details>
+  <details><summary>第二輪一致性審查(Rev.4,2026-07-08)— 文件/程式/報告交叉稽核</summary><div class="inner">
+  <p style="font-size:13.5px">針對《技術說明》《SOP》《報告 Rev.3》與程式碼、<code>stats.json</code> 做全量交叉比對。<b>統計數字全部不變</b>(重跑 baseline_analysis 與 Rev.3 完全一致),修正集中於文字口徑、文件正確性與 Word 版面:</p>
+  <ul class="tight" style="font-size:13.5px">
+  <li>報告全文統一 <b>RT &gt; 5</b>(與程式一致);2 號機改述「未呈現有效運轉」;「能量守恆」改「合理性檢核」;NMBE/留一法措辭收斂。</li>
+  <li>Word 表格加跨頁重複表頭、資料列不拆頁;SOP 補 BASE/OUT 路徑、階段 3.0(驗證設定前移)、階段 10 改名「標準與指引對照檢核」、逐頁 PDF QA。</li>
+  <li>產出 <b>Rev.4</b> Word/HTML(build_docx_rev4.py／build_report_rev4.py);Rev.3 產生器保留備查。</li>
+  <li>再次印證「先查證再採納」:Manus 審查之常數表本身有誤,結論僅部分採納;Gemini 指之行號「偏移」為誤讀(不同常數,行號皆正確)。</li></ul>
+  <p style="font-size:13.5px;color:var(--ink2)">審查原文見 Obsidian:審查報告…一致性檢查_{Gemini,Manus,ChatGPT};逐項處理見任務紀錄 §11。</p></div></details>
+  <details><summary>Rev.5 → Rev.6 修訂(2026-07-08~09)— ECWT 多元迴歸與第三輪交叉審查</summary><div class="inner">
+  <p style="font-size:13.5px"><b>Rev.5</b>:依<b>節能廠商審查意見</b>(「迴歸應以納入冷卻水之方式建立方程式,ASHRAE G14/ISO/FEMP 均有依據」),採相關變數辨識將 ECWT 納為第二變數,正式基線改為<b>多元迴歸模型 B</b>,單變數模型 A 併列對照;新增 §6.4 多元迴歸、§7 改雙軌節能量算法、附錄 A 增列 ECWT 欄。</p>
+  <p style="font-size:13.5px"><b>Rev.6</b>:依 Manus/Gemini/ChatGPT 對 Rev.5 之交叉審查修訂——</p>
+  <ul class="tight" style="font-size:13.5px">
+  <li>估算比例改列<b>三種分母</b>:全日曆分鐘 1.88% / 運轉有效分鐘 4.19% / 主機能量 6.81%(原僅寫 1.88% 易誤解為能量占比),刪除未證實之「±1%」。</li>
+  <li>圖 7 右改為模型 B <b>留一法(樣本外)</b>殘差;圖說改述「含截距 OLS 樣本內殘差必與 ECWT 正交」為預期性質、非獨立驗證。</li>
+  <li>§6.4/§7 明確 <b>ECWT 非純外生變數</b>並新增「ECM 是否影響 ECWT」<b>決策表</b>;ECWT 係數解讀補「在相同 RT·h 下」;模型 C 改稱「水溫差代理指標」。</li>
+  <li>新增殘差診斷(Durbin–Watson、逐月分塊交叉驗證);G14 語氣改「僅供比較、不作合格判定」;模型 A 比較列改用同樣本方程式並補調整後 R²;公式正負號改通用格式。</li>
+  <li>2 號機改述「未運轉但有約 0.25 kW 待機(549 kWh,占 0.70%)」並加運轉門檻防呆;平日中位數改週一~週五、週日停機改「多數」;FEMP 明列 v5.0(2024)。</li>
+  <li>簽核改<b>具名</b>並加 AI 使用聲明;新增<b>附錄 D 可追溯性</b>(輸入/程式/輸出 SHA-256 雜湊、門檻參數、套件版本);檔名改 202509-202511。</li></ul>
+  <p style="font-size:13.5px;color:var(--ink2)">審查原文見 Obsidian:能源基線Rev5_文件與程式交叉審查報告_{ChatGPT,Gemini,Manus};逐項處理見任務紀錄 §12。</p></div></details>
+  <details><summary>未決事項(7 項)</summary><div class="inner"><ul class="tight" style="font-size:13.5px">
+  <li>12 月資料未取得(2025-12-10 截圖無法比對);取得後工具可直接處理</li>
+  <li>電表/流量計/溫度計精度規格與校正紀錄,契約結算前須補(§8-4)</li>
+  <li>截圖驗證僅涵蓋 9 月三時段,建議補 10、11 月佐證(§8-5)</li>
+  <li>建議報告期前增設外氣溫濕度常設量測(§8-3)</li>
+  <li>主機銘牌額定值、電價未取得(容量率與費用分析待補)</li>
+  <li>改善建議:泵浦變頻化+溫差/壓差控制列第一優先</li>
+  <li>報告「編製/審查/核准」簽核欄待人工填寫</li></ul></div></details>
+  <h2>檔案與出處</h2>
+  <div class="card"><ul class="tight" style="font-size:13.5px">
+  <li><b>報告本體</b>:能源基線報告_改善前_<b>202509-202511_Rev6</b>.docx / .html / .pdf(最新,2026-07-09)· 產生器 build_docx_rev6.py／build_report_rev6.py(Rev.3~5 產生器保留備查)</li>
+  <li><b>審查意見</b>:第一輪(→Rev.3)審查意見_Gemini、審查結果與調整建議_Manus · 第二輪(→Rev.4)一致性檢查_{Gemini,Manus,ChatGPT} · 第三輪(→Rev.6)能源基線Rev5_文件與程式交叉審查報告_{ChatGPT,Gemini,Manus}</li>
+  <li><b>開發維護</b>:技術說明_資料修復與能源基線_開發維護參考.md(四支 Python 逐模組說明)· SOP_新資料產出能源基線報告作業程序.md(10 階段作業程序)· HVAC_Data_Refinery_NotebookLM.pdf</li>
+  <li><b>工具</b>:HVAC_GapFiller.py(GUI/CLI/自我驗證)+ 補值工具使用說明.md;修復後資料與驗證圖在 <span class="kbd">Repaired\\</span></li>
+  <li><b>重現</b>:分析腳本\\baseline_analysis.py → report_assets\\stats.json(報告每個數字的來源,含 provenance 雜湊)→ build_report_rev6.py / build_docx_rev6.py</li>
+  <li><b>對應階段文件</b>:<a href="#s01">01 現勘</a> 1-5 能源基線報告 ✅ · <a href="#s08">08 成果報告</a> 8-2 M&V(基線已備,待報告期)</li></ul></div>
+  <div class="foot">資料正本:<span class="kbd">10_能源基線報告</span>(總覽、任務紀錄、技術說明、SOP、補值工具使用說明、三輪審查意見 md 與原始/修復 CSV)</div>`;
+}
+
+/* ---- render ---- */
+function route(){const h=location.hash.replace("#","")||"overview";return NAVDEF.some(n=>n[0]===h)?h:"overview";}
+function render(){
+  const r=route();
+  $("#nav").innerHTML=navHTML(r);
+  $("#mnav").innerHTML=mnavHTML(r);
+  let html="";
+  if(r==="overview")html=vOverview();
+  else if(r==="timeline")html=vTimeline();
+  else if(r==="problems")html=vProblems();
+  else if(r==="gaps")html=vGaps();
+  else if(r==="help")html=vHelp();
+  else if(r==="partners")html=vPartners();
+  else if(r==="baseline")html=vBaseline();
+  else html=vStage(STAGES.find(s=>"s"+s.id===r));
+  $("#app").innerHTML=html;
+}
+function renderKeep(inp){const pos=inp.selectionStart;render();const el=$("#app input[type=search]");if(el){el.focus();el.setSelectionRange(pos,pos);}}
+window.addEventListener("hashchange",()=>{render();$(".main").scrollTop=0;window.scrollTo(0,0);});
+render();
+</script>
+</body>
+</html>
