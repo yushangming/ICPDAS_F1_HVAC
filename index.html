@@ -133,7 +133,7 @@ ul.tight li{margin:4px 0}
     <div class="t3">2024-10 現勘 → 2026-07 驗收中</div>
   </div>
   <nav class="nav" id="nav"></nav>
-  <div class="sideft">資料正本:Obsidian<br>08_報告與SI範本 ·<br>09_合作夥伴 · 10_能源基線<br>03 合約(2026-01-05)<br>頁面版本:2026-07-28</div>
+  <div class="sideft">資料正本:Obsidian<br>08_報告與SI範本 ·<br>09_合作夥伴 · 10_能源基線<br>11_監控系統 · 03 合約<br>頁面版本:2026-08-02</div>
 </aside>
 <main class="main"><div class="wrap" id="app"></div></main>
 </div>
@@ -191,8 +191,14 @@ const TL=[ // p:1現勘一階 2二階設計 3二階施工 4試車驗收, m:里�
 {p:4,d:"2026-07-08 / 07-09",t:"能源基線報告 Rev.5 → Rev.6:採納節能廠商意見,以冷凝器進水溫(ECWT)為第二相關變數,正式基線改為多元迴歸模型 B(日 kWh=0.907×RT·h+13.19×ECWT−190.3,R²=0.956),模型 A 併列對照;再依 Manus/Gemini/ChatGPT 交叉審查完成 Rev.6(估算比例三分母、殘差診斷、ECWT 決策表、具名簽核、可追溯性雜湊、附錄 D)",m:1},
 {p:4,d:"2026-07-12",t:"能源基線報告 Rev.7:文件結構與版面(獨立封面頁、目錄 TOC 功能變數、修訂紀錄前移至正文前、附錄 D→C、頁尾頁碼、PDF 書籤);統計數據、模型與結論與 Rev.6 完全相同,27 → 30 頁"},
 {p:4,d:"2026-07-28",t:"取得二階承攬工程契約書正本(72 頁,含附件一~八)並建檔:合約金額 10,372,444 元、四期付款、工期 90 天、保固 1 年、逾期日扣千分之一、TAB 已計價 10 萬、預期成果「系統總能效提升 30%」——補齊筆記庫長期缺漏之商務資料",m:1},
+{p:5,d:"2026-07-09 ~ 07-11",t:"Grafana MainPage 全面改造並拆成 4 頁(系統總覽、冰機組、能效、水溫流量、電力);查出 kW/RT 斷寫根因——Node-RED 計算節點 0/0=NaN 穿過過濾器致整批寫入被拒,全域無 catch 節點故靜默 34 小時,修復後恢復寫入;InfluxDB 建降採樣 task hvac_daily",m:1},
+{p:5,d:"2026-07-16 / 07-21",t:"節能診斷與泵浦變頻效益評估(RPT-002);7 台 Danfoss 變頻器經 Modbus TCP 接入——現場早已裝設完成、只是設在 60Hz,第一順位節能措施改為「調既有變頻器頻率、零設備投資」"},
+{p:5,d:"2026-07-26 ~ 07-27",t:"HVAC 數位孿生框架(Blender → SVG → mapping → 動畫引擎,換場域只換底圖);SSH 改金鑰登入、Node-RED 1880 對外封鎖改走隧道;InfluxDB 資料自 eMMC 遷至 SSD(⚠ 兩週驗證期至 08-10)",m:1},
+{p:5,d:"2026-07-29 ~ 07-31",t:"系統能效 kW/RT 計算口徑檢討(RPT-003,83 天重算);查出備份漏掉 icpdas/f1 bucket;控制器網段 /16→/24 零停機;新增分頁 G20_SYS_ERR 全域錯誤攔截;查出 InfluxDB 重啟會讓降採樣 task 跳過一天且回報成功"},
+{p:5,d:"2026-08-01",t:"啟動暫態 TypeError 防護(30 節點、零停機)、控制器記憶體診斷與四項處置(可用記憶體 395→576 MB);Grafana → Telegram 告警增至 7 條;交付 SYS-001 Node-RED 流程說明 Rev.1.1、SYS-002/003 離線建模文件、EDU-001 教育訓練 Rev.1.5",m:1},
+{p:5,d:"2026-08-02",t:"監控系統工作區之可查詢文件鏡像入筆記庫,新增 11_監控系統_Grafana與NodeRED(27 份任務紀錄、8 份交付文件、Flux 查詢與面板截圖);程式碼與金鑰刻意不複製,正本仍在工作區",m:1},
 ];
-const PERIODS=["全部","現勘與一階(2024-10~2025-07)","二階設計與合約(2025-07~2026-01)","二階施工(2026-01~03)","試車與驗收(2026-04~)"];
+const PERIODS=["全部","現勘與一階(2024-10~2025-07)","二階設計與合約(2025-07~2026-01)","二階施工(2026-01~03)","試車與驗收(2026-04~)","監控平台調適(2026-07~08)"];
 
 const PROBS=[
 {s:"一階施工",q:"2025-04-10 冰機多次跳機",w:"冷卻水泵低壓側負壓吸入空氣、水塔水位不足;施工關閥造成水路壓力變化、閒置水塔大量漏水,水失衡導致冰機壓力異常",f:"以 email 完整釐清因果與責任;要求監控冰機壓力錶維持 12~15kg;一階完成流量計安裝補足監測盲區"},
@@ -355,16 +361,16 @@ const GAPS=[
 {g:"03_報價",items:["數量計算書","單價分析表(PC 表)——✅ 合約附件三價目表可作計價基準,可勾銷;惟折扣「已分攤」使單價/複價不同比例,追加減前須先約定基準","付款條件與里程碑——✅ 已補齊(合約 §20 四期:3,137,400×3 + 驗收後 1,045,800),可勾銷","各版本報價金額與最終合約金額補登——✅ 二階已補登(10,372,444 元含稅);⚠ 一階(2025-02-11)金額仍待補","釐清付款分期合計 10,458,000 與合約總價 10,372,444 之差額 85,556 元(稅基認定不同,結算請款前確認)"]},
 {g:"04_合約",items:["保固條款/各設備保固起訖彙整——合約 §21 已定「驗收合格日起 1 年」;⚠ 各設備原廠保固起訖仍待彙整","履約保證金/銀行保函——✅ 已查證合約全文未設此條款,可勾銷(高階甲方案場須另訂 5~10%)","保險證明(營造綜合險、雇主責任、第三人責任)——合約 §26 已定投保義務(保費由甲方列標單);⚠ 保單影本待取得","承攬商工安切結/危害告知簽認——合約附件七《職安衛管理計劃書》已具備;⚠ 危害告知與切結簽認單待補","分包商清冊與資格文件——附件六已列各工項廠商、附件一列人員與焊工證號;⚠ 正式清冊(證照/保險/評鑑)待補","逾期罰則/趕工條款(查合約本文)——✅ 已查證:§22 每逾一日扣總價千分之一(≈10,372 元/日),可勾銷","保固起算日書面化","開工前置:保證/保險/證照文件補齊","工期展延之書面認定(水泵船期、業主停電時段調整 vs 合約 90 天工期與 §22 罰則)"]},
 {g:"05_施工",items:["施工日報(高階甲方要求)","材料送審追蹤表(Submittal Log)","工安文件(動火/高架許可、TBM)","變更/追加申請與追蹤表","施工照片成冊(前/中/後)","管路試壓正式測試報告","主電絕緣測試紀錄表單","保溫施工檢驗紀錄","追加項目金額、核准紀錄與追加減總表"]},
-{g:"06_試車",items:["試車計畫書","功能測試報告(2 號機故障測試結果)","TAB 報告(測試調整平衡)——合約附件三已計價 100,000 元,屬承商應交付項目","缺失改善追蹤表 Punch List 正式表","連續 30 日運轉數據佐證(監控報表)","教育訓練簽到表與訓練紀錄","感測器逐點校正紀錄表"]},
+{g:"06_試車",items:["試車計畫書","功能測試報告(2 號機故障測試結果)","TAB 報告(測試調整平衡)——合約附件三已計價 100,000 元,屬承商應交付項目","缺失改善追蹤表 Punch List 正式表","連續 30 日運轉數據佐證(監控報表)——✅ 監控平台已可產出(kW/RT 斷寫 2026-07-11 修復、InfluxDB hvac_daily 降採樣),待出表","教育訓練簽到表與訓練紀錄(EDU-001 教材已至 Rev.1.5)","感測器逐點校正紀錄表"]},
 {g:"07_驗收",items:["驗收計畫/程序書——合約 §18 已定程序、附件五已定判定項目,僅需整合成書","二階正式驗收清單(簽署版)——可直接用合約附件五格式逐項簽認","文件移交清冊簽收單","備品/鑰匙/工具移交清單","保固書與保固起算通知","二階驗收缺失紀錄","圖控專案檔業主下載留存確認"]},
-{g:"08_成果報告",items:["M&V 節能成效驗證報告(改善前基線已完成 2026-07-12 Rev.7;待二階報告期數據;驗證標的=合約「能效提升 30%」→ 約 0.748 kW/RT)","竣工圖 as-built 補全(單線圖、盤體圖、DWG 原檔)","系統級 O&M 總冊彙編","設備清冊與保固總表——型號/數量已自合約附件三回填、保固 1 年依 §21;⚠ 缺序號與原廠保固起訖","感測器校正計畫表","告警處理一頁式 SOP 彙編","控制邏輯說明書(變頻策略、加卸載邏輯)","成本結算報告(預算 vs 實際含追加)——合約金額與付款里程碑已補登;⚠ 缺追加減帳與請款紀錄","遺留問題清單獨立成冊送業主簽認","實績證明(業主出具)","合約其餘預期成果之驗收回應:辦公室冷度不均、冷卻水管路漏水(附件一載明)"]},
+{g:"08_成果報告",items:["M&V 節能成效驗證報告(改善前基線已完成 2026-07-12 Rev.7;待二階報告期數據;驗證標的=合約「能效提升 30%」→ 約 0.748 kW/RT)","竣工圖 as-built 補全(單線圖、盤體圖、DWG 原檔)","系統級 O&M 總冊彙編","設備清冊與保固總表——型號/數量已自合約附件三回填、保固 1 年依 §21;⚠ 缺序號與原廠保固起訖","感測器校正計畫表","告警處理一頁式 SOP 彙編","控制邏輯說明書(變頻策略、加卸載邏輯)","成本結算報告(預算 vs 實際含追加)——合約金額與付款里程碑已補登;⚠ 缺追加減帳與請款紀錄","遺留問題清單獨立成冊送業主簽認","實績證明(業主出具)","合約其餘預期成果之驗收回應:辦公室冷度不均、冷卻水管路漏水(附件一載明)","監控平台之業主端維運交接文件(告警門檻調整、帳號與權限、備份與還原、資料保存策略)——SYS-001/EDU-001 已具備部分素材,待彙整"]},
 ];
 const GAP_KEY="icpdas-f1-gaps";
 
 /* ============ 路由與渲染 ============ */
 const NAVDEF=[["overview","總覽",""],["timeline","時程",""],["problems","問題",""],
  ...STAGES.map(s=>["s"+s.id,s.name,s.id]),
- ["partners","合作夥伴遴選","09"],["baseline","能源基線","10"],
+ ["partners","合作夥伴遴選","09"],["baseline","能源基線","10"],["monitor","監控系統","11"],
  ["gaps","待補追蹤",""],["help","使用說明",""]];
 const $=s=>document.querySelector(s);
 const esc=t=>t.replace(/&/g,"&amp;").replace(/</g,"&lt;");
@@ -374,7 +380,7 @@ function navHTML(cur){
   let h=grp("導覽");
   for(const[id,label,num]of NAVDEF){
     if(id==="s01")h+=grp("階段文件 01–08");
-    if(id==="partners")h+=grp("延伸主題 09–10");
+    if(id==="partners")h+=grp("延伸主題 09–11");
     if(id==="gaps")h+=grp("追蹤");
     h+=`<a href="#${id}" class="${cur===id?'on':''}" ${cur===id?'aria-current="page"':''}>${num?`<span class="num">${num}</span>`:""}${label}</a>`;
   }
@@ -421,7 +427,7 @@ function vOverview(){
   </table></div></div>
   <h2>八階段文件狀態</h2>
   <div class="grid g2">${cards}</div>
-  <h2>延伸主題(09–10)</h2>
+  <h2>延伸主題(09–11)</h2>
   <div class="grid g2">
     <a href="#partners" style="text-decoration:none;color:inherit"><div class="card" style="margin:0;height:100%">
       <div style="font-size:12px;color:var(--ink2);letter-spacing:.1em">09 節能產業的合作夥伴</div>
@@ -433,10 +439,18 @@ function vOverview(){
       <div style="font-weight:800;font-size:16px;color:var(--teal-dk)">改善前能源基線<span style="font-weight:400;color:var(--ink2);font-size:12px"> Energy Baseline</span></div>
       <div style="margin-top:6px;font-size:13px;color:var(--ink2)">1.069 kW/RT · 多元迴歸 EnB 模型(含 ECWT)· 資料修復與驗證 · Rev.7(2026-07-12)</div>
     </div></a>
+    <a href="#monitor" style="text-decoration:none;color:inherit"><div class="card" style="margin:0;height:100%">
+      <div style="font-size:12px;color:var(--ink2);letter-spacing:.1em">11 監控系統</div>
+      <div style="font-weight:800;font-size:16px;color:var(--teal-dk)">Grafana · Node-RED<span style="font-weight:400;color:var(--ink2);font-size:12px"> Monitoring Platform</span></div>
+      <div style="margin-top:6px;font-size:13px;color:var(--ink2)">3 頁儀表板 · 908 節點 · 7 條 Telegram 告警 · 27 份調適紀錄 + 8 份交付文件(2026-08-02 鏡像)</div>
+    </div></a>
   </div>
   <h2>最新動態</h2>
   <div class="card" style="font-size:14px">
     <ul class="tight">
+      <li><b>2026-08-02</b> 新增 <b>11 監控系統</b>:將 Grafana/Node-RED 現場調適工作區的可查詢文件鏡像入筆記庫(27 份任務紀錄、8 份交付文件、28 支 Flux 查詢、22 張面板截圖);<b>程式碼與金鑰刻意不複製</b>——正本仍在工作區,鏡像僅供查詢與比對 → <a href="#monitor">11 監控系統</a>。</li>
+      <li><b>2026-08-01</b> 監控平台一輪加固:啟動暫態防護(零停機)、記憶體診斷與四項處置、<b>Grafana → Telegram 告警增至 7 條</b>;交付 <b>SYS-001</b> Node-RED 流程說明 Rev.1.1、<b>SYS-002/003</b> 離線建模文件、<b>EDU-001</b> 教育訓練 Rev.1.5 → <a href="#monitor">11 監控系統</a>。</li>
+      <li><b>2026-07-11</b> 查出並修復 <b>kW/RT 斷寫</b>根因(Node-RED 計算節點 <code>0/0=NaN</code> 穿過過濾器致整批寫入被拒,全域無 catch 節點故靜默 34 小時)——這是「連續運轉數據佐證」能否成立的前提 → <a href="#monitor">11 監控系統</a>。</li>
       <li><b>2026-07-28</b> 取得<b>二階承攬工程契約書正本</b>(72 頁,含附件一~八)並建檔於 <span class="kbd">03_二階段_設計與合約_2025</span>:合約總價 <b>10,372,444 元</b>(含稅)、四期付款、工期 90 天、保固 1 年、逾期日扣千分之一、<b>TAB 已計價 10 萬</b>、預期成果<b>能效提升 30%</b> → 補齊筆記庫長期缺漏之商務資料,階段 <a href="#s03">03</a>/<a href="#s04">04</a>/<a href="#s07">07</a>/<a href="#s08">08</a> 狀態同步更新。</li>
       <li><b>2026-07-12</b> 能源基線報告 <b>Rev.7</b>:文件結構與版面(獨立封面頁、目錄 TOC、修訂紀錄前移、附錄 D→C、頁尾頁碼、PDF 書籤);<b>統計數據與結論同 Rev.6</b>,27 → 30 頁 → <a href="#baseline">10 能源基線</a>。</li>
       <li><b>2026-07-09</b> 能源基線報告 <b>Rev.6</b> 完成:依 Manus/Gemini/ChatGPT 對 Rev.5 之交叉審查修訂(估算比例三分母、殘差診斷、ECWT 決策表、具名簽核、可追溯性雜湊、附錄 D);檔名改 202509-202511 → <a href="#baseline">10 能源基線</a>。</li>
@@ -449,7 +463,7 @@ function vOverview(){
       <li><b>結案前最大缺口</b>:M&V 報告本體(基線已備)、追加減帳總表與成本結算、Punch List 正式表、<b>TAB 報告(合約已計價 10 萬)</b>、二階正式驗收清單與保固起算通知 → 見 <a href="#gaps">待補追蹤</a>。(合約金額與付款里程碑已於 2026-07-28 補齊)</li>
     </ul>
   </div>
-  <div class="foot">資料正本:Obsidian 筆記庫 <span class="kbd">08_報告與SI範本</span>(10 份 md)+ <span class="kbd">09_節能產業的合作夥伴</span> + <span class="kbd">10_能源基線報告</span> + <span class="kbd">03_二階段_設計與合約_2025</span>(合約) · 本頁由 Claude 產生(2026-07-28)· md 更新後請依 CLAUDE任務紀錄.md 流程重新發布</div>`;
+  <div class="foot">資料正本:Obsidian 筆記庫 <span class="kbd">08_報告與SI範本</span>(10 份 md)+ <span class="kbd">09_節能產業的合作夥伴</span> + <span class="kbd">10_能源基線報告</span> + <span class="kbd">11_監控系統_Grafana與NodeRED</span> + <span class="kbd">03_二階段_設計與合約_2025</span>(合約) · 本頁由 Claude 產生(2026-08-02)· md 更新後請依 CLAUDE任務紀錄.md 流程重新發布</div>`;
 }
 
 /* ---- 時程 ---- */
@@ -514,7 +528,7 @@ function vGaps(){
   return `<div class="eyebrow">Gap Tracker</div><h1>待補事項追蹤</h1>
   <div class="sub">結案前需補齊之文件與紀錄(出處:各階段文件「⚠ 需要補充」標記)。勾選狀態儲存於本機瀏覽器,重新發布網頁不會清除。</div>
   <div class="card"><div class="gh" style="display:flex;align-items:center;gap:12px"><b style="font-size:16px">整體進度</b><div class="bar"><i style="width:${pct}%"></i></div><span class="pct">${gc.done}/${gc.total}(${pct}%)</span></div></div>
-  <div class="note"><b>結案前優先</b>:M&V 報告本體(改善前基線已於 2026-07-12 Rev.7 完成)、追加減帳總表與成本結算、Punch List 正式表、<b>TAB 報告(合約附件三已計價 100,000 元)</b>、二階正式驗收清單與保固起算通知。<br>2026-07-28 合約正本建檔後,03/04 兩組多項已可勾銷(項目文字已標註「✅ …可勾銷」);勾選狀態由您自行勾。</div>
+  <div class="note"><b>結案前優先</b>:M&V 報告本體(改善前基線已於 2026-07-12 Rev.7 完成)、追加減帳總表與成本結算、Punch List 正式表、<b>TAB 報告(合約附件三已計價 100,000 元)</b>、二階正式驗收清單與保固起算通知。<br>2026-07-28 合約正本建檔後,03/04 兩組多項已可勾銷(項目文字已標註「✅ …可勾銷」);勾選狀態由您自行勾。<br>2026-08-02:06 組「連續 30 日運轉數據佐證」已因監控平台修復而具備產出條件;08 組末新增 1 項(監控平台維運交接文件),既有項目順序與勾選狀態不受影響。</div>
   ${grps}`;
 }
 function toggleGap(id){const st=gapState();if(st[id])delete st[id];else st[id]=1;localStorage.setItem(GAP_KEY,JSON.stringify(st));render();}
@@ -540,10 +554,11 @@ function vHelp(){
   <li><b>與甲方文管對接</b>:送審狀態以送審追蹤表(Submittal Log)管理(見階段 05)。</li></ul></div>
   <h2>本網頁的更新方式</h2>
   <div class="card"><ul class="tight">
-  <li>資料正本是 Obsidian 的 <span class="kbd">08_報告與SI範本</span>(10 份 md)與 <span class="kbd">09_節能產業的合作夥伴</span>、<span class="kbd">10_能源基線報告</span>;本頁<b>不會自動同步</b>。</li>
+  <li>資料正本是 Obsidian 的 <span class="kbd">08_報告與SI範本</span>(10 份 md)與 <span class="kbd">09_節能產業的合作夥伴</span>、<span class="kbd">10_能源基線報告</span>、<span class="kbd">11_監控系統_Grafana與NodeRED</span>;本頁<b>不會自動同步</b>。</li>
+  <li><b>11 監控系統本身也是鏡像</b>:其正本在工作區 <span class="kbd">E:\\Tool_By_AI\\Claude\\ICPDAS_F1_HVAC_Grafana_NoedRed</span>。工作區更新 → 先跑 <span class="kbd">_同步_從工作區更新.ps1</span> 拉進筆記庫 → 再請 Claude 重新發布本頁。</li>
   <li>md 更新後,開啟 Claude Code 並下指令(務必附上本頁網址):「我已更新報告與SI範本的 md 檔,請先讀 CLAUDE任務紀錄.md,然後重新產生互動式網頁,更新到 <b>本頁網址</b>」。</li>
   <li>重新發布後網址不變,瀏覽器重新整理即為新版;待補追蹤的勾選狀態存於瀏覽器,不會被清除。</li></ul></div>
-  <div class="foot">文件索引:00_使用說明與文件架構 · 00_工程總結報告 · 01_現勘 ~ 08_成果報告階段文件 · 09 合作夥伴遴選(SOP+評分表)· 10 能源基線報告(總覽+任務紀錄+技術說明+SOP+補值工具說明+三輪審查,Rev.7)· 03_二階段_設計與合約_2025:2026-01-05 承攬工程契約書(合約正本 72 頁 PDF 於該資料夾 附件\\)</div>`;
+  <div class="foot">文件索引:00_使用說明與文件架構 · 00_工程總結報告 · 01_現勘 ~ 08_成果報告階段文件 · 09 合作夥伴遴選(SOP+評分表)· 10 能源基線報告(總覽+任務紀錄+技術說明+SOP+補值工具說明+三輪審查,Rev.7)· 11 監控系統(27 份調適紀錄+8 份交付文件+Flux 查詢+面板截圖,自工作區鏡像)· 03_二階段_設計與合約_2025:2026-01-05 承攬工程契約書(合約正本 72 頁 PDF 於該資料夾 附件\\)</div>`;
 }
 
 /* ---- 09 合作夥伴遴選 ---- */
@@ -673,6 +688,77 @@ function vBaseline(){
   <div class="foot">資料正本:<span class="kbd">10_能源基線報告</span>(總覽、任務紀錄、技術說明、SOP、補值工具使用說明、三輪審查意見 md 與原始/修復 CSV)</div>`;
 }
 
+/* ---- 11 監控系統 ---- */
+function vMonitor(){
+  return `<div class="eyebrow">Monitoring Platform · 11</div><h1>監控系統 — Grafana · Node-RED · InfluxDB</h1>
+  <div class="sub">驗收後由泓格自行調適的<b>監控與告警平台</b>:量測資料怎麼被採集、計算、呈現與告警。與 <a href="#baseline">10 能源基線</a> 是同一套資料的兩端——本頁負責資料鏈,10 負責用這些資料建立基線與 M&V。調適期 2026-07-09 ~ 08-01,紀錄與文件已於 <b>2026-08-02</b> 鏡像入筆記庫。</div>
+  <div class="note"><b>本資料夾是唯讀鏡像,不是正本。</b>正本(唯一真相)在工作區 <span class="kbd">E:\\Tool_By_AI\\Claude\\ICPDAS_F1_HVAC_Grafana_NoedRed</span>,由另一個工作階段持續調適中。要改內容請到工作區改;工作區更新後執行 <span class="kbd">11_…\\_同步_從工作區更新.ps1</span> 重新拉取(只複製、不刪來源)。<b>程式碼(面板碼、部署腳本、數位孿生)與金鑰刻意未複製</b>——鏡像過來只會靜默分歧,改錯邊會推壞線上面板。</div>
+  <div class="grid g4">
+    <div class="stat"><div class="k">線上儀表板</div><div class="v">3</div><div class="n">頁 · MainPage / 電力 / Other System</div></div>
+    <div class="stat"><div class="k">Node-RED</div><div class="v">908</div><div class="n">節點 · 25 分頁(G1~G20 + 5)</div></div>
+    <div class="stat"><div class="k">Telegram 告警</div><div class="v">7</div><div class="n">條(2026-08-01)</div></div>
+    <div class="stat"><div class="k">調適任務紀錄</div><div class="v">27</div><div class="n">份 + 8 份交付文件</div></div>
+  </div>
+  <h2>系統環境速查</h2>
+  <div class="card"><div class="tblwrap"><table>
+    <tr><th style="width:110px">控制器</th><td>i.MX8M Mini,公網 210.61.208.29;<code>eth1</code> = 10.0.15.120/24、GW 10.0.15.254(<b>由 NetworkManager 管,改 /etc/network/interfaces 無效</b>);LAN1 接 4G 路由器供 Telegram 外連(公司內網封鎖對外)</td></tr>
+    <tr><th>Grafana</th><td>:3000 — MainPage、Electricity Information、Other System Energy Efficiency(<code>Old Design Backup</code> 已於 2026-08-01 移除)。自繪面板用既有 <code>volkovlabs-echarts-panel</code>(Business Charts),全程未安裝新外掛</td></tr>
+    <tr><th>Node-RED</th><td>:1880,<b>已從公網封鎖</b>,須先開 SSH 隧道 <code>-L 18800:127.0.0.1:1880</code>。分頁 G1~G20 + Data Layer / External_Info / Flow / Calculate &amp; Publish / APP Notify</td></tr>
+    <tr><th>InfluxDB</th><td>:8086。<b>2026-07-27 資料已由 eMMC 遷至 /mnt/SSD/influxdb</b>(⚠ 兩週驗證期至 2026-08-10,每次開工需驗一次 shard 路徑);降採樣 bucket <code>hvac_daily</code> + task <code>downsample_hvac_daily</code></td></tr>
+    <tr><th>連線</th><td>2026-07-27 起 <b>SSH 密碼登入已關閉、只認金鑰</b>;Grafana 匿名瀏覽已關閉、腳本改走 service account token。金鑰與 token 存於工作區 <code>.secrets\\</code>,<b>未複製到筆記庫</b>(鏡像的 md 已將明文密碼遮蔽為 <code>&lt;密碼&gt;</code>)</td></tr>
+  </table></div></div>
+  <h2>與工程案的關係</h2>
+  <div class="gatebox">
+    <div class="card"><div class="h">回頭改寫了節能建議</div><div style="font-size:14px"><b>RPT-002 Rev.2.0 重大更正</b>:原報告寫泵與塔「全為定速」、把「輔機<b>加裝</b>變頻」列第一順位措施;實際上<b>現場 7 台變頻器早已裝設完成,只是設在 60 Hz</b>(其中僅 2 台通電)→ 改為「調整既有變頻器頻率、<b>零設備投資</b>」。這是唯一會導致錯誤投資決策的錯誤。對照 <a href="#s02">階段 02</a> 之設備清冊。</div></div>
+    <div class="card"><div class="h">量出了感測器偏差</div><div style="font-size:14px"><b>RPT-001 Rev.2.2</b>:冷卻水塔趨近溫度出現物理上不可能的負值 → 查出量測偏差約 <b>0.45 °C</b>(初版寫 0.6,已下修),並將面板閘門改為穩態運轉判定。DL-102 韌體已於 2026-07-30 更換,但觀測期間相對濕度未達 100%,<b>尚無法確認缺陷是否修復</b>,仍列未解決。</div></div>
+    <div class="card"><div class="h">定義了 kW/RT 的算法</div><div style="font-size:14px"><b>RPT-003 Rev.1.2</b>:系統能效計算口徑檢討(含 83 天重算)。冰機間歇運轉、輔機仍轉時該不該算能效——直接決定 <a href="#baseline">能源基線</a> 的 EnPI 與合約「能效提升 30%」驗證標的怎麼比。⚠ 分析期間橫跨 2026-06-25 <b>冷卻水塔運轉模式永久變更</b>,故「冷卻水側空轉 42.0 kWh/日」是兩種組態的混合平均。</div></div>
+    <div class="card"><div class="h">提供了驗收所需的數據</div><div style="font-size:14px"><b>連續運轉數據佐證</b>(<a href="#s06">階段 06</a> 6-7)過去只有 email 聲明;kW/RT 斷寫修復 + <code>hvac_daily</code> 降採樣後,已可自 InfluxDB 產出運轉報表。<b>EDU-001 Rev.1.5</b> 儀表板數據判讀教育訓練可作為 <a href="#s07">階段 07</a> 教育訓練佐證的一部分(⚠ 簽到表仍待補)。</div></div>
+  </div>
+  <h2>重點內容</h2>
+  <details><summary>交付文件(現行版 8 份,鏡像於 02_交付文件)</summary><div class="inner">
+  <div class="tblwrap"><table><tr><th style="width:76px">編號</th><th>文件</th><th style="width:76px">版次</th><th>要點</th></tr>
+  <tr><td>RPT-001</td><td>冷卻水塔趨近溫度異常</td><td>Rev. 2.2</td><td>感測器偏差 0.45 °C;濕球缺陷命中率更正為 100%;韌體已換但尚未複驗</td></tr>
+  <tr><td>RPT-002</td><td>節能診斷與泵浦變頻節能評估</td><td>Rev. 2.0</td><td>第一順位措施改為「調既有變頻器頻率」;三台水塔非同型(CT-01 3.88 kW vs CT-02/03 各 1.38 kW)</td></tr>
+  <tr><td>RPT-003</td><td>系統能效 kW/RT 計算口徑檢討</td><td>Rev. 1.2</td><td>全時段口徑與「停機」正名;83 天重算與逐日明細</td></tr>
+  <tr><td>EDU-001</td><td>儀表板數據判讀教育訓練</td><td>Rev. 1.5</td><td>五大區塊判讀 + 告警規則章節;⚠ 新增章節尚無面板截圖(該機未裝 image renderer)</td></tr>
+  <tr><td>SYS-001</td><td>Node-RED 資料流程說明</td><td>Rev. 1.1</td><td>908 節點全流程、bucket 與 MQTT JSON 組成、已知限制 12 項</td></tr>
+  <tr><td>SYS-002</td><td>離線建模環境佈署指南</td><td>Rev. 1.8</td><td>為強化學習(SB3)做準備;PowerShell 指令差異、資料抓取 JOBS 清單</td></tr>
+  <tr><td>SYS-003</td><td>離線建模資料管線:操作與判讀</td><td>Rev. 1.0</td><td>1 分鐘寬表合併 + 六項品質遮罩 + 欄位來源清單</td></tr>
+  <tr><td>OPS-001</td><td>冷卻水塔運轉模式輪替試驗</td><td>Rev. 1.0</td><td>作業說明;電價統一 NT$4/kWh 並註明為假設值</td></tr></table></div>
+  <p style="font-size:13.5px">⚠ 文件編號為 AI 擬定,若泓格有正式編碼規則,改各產生器的 <code>DOCNO</code> 重跑即可。<b>內容正本是同名 .md</b>,docx 由產生器產出——改文件改 .md,不要直接改 Office 檔。已被取代的舊版<b>刻意未鏡像</b>,避免在筆記庫查到已更正的數字。</p></div></details>
+  <details><summary>資料鏈可靠度:五件「靜默失敗」與修復</summary><div class="inner">
+  <div class="tblwrap"><table><tr><th style="width:100px">日期</th><th>症狀</th><th>根因</th><th>處置</th></tr>
+  <tr><td class="date">2026-07-11</td><td><b>kW/RT 停寫 34 小時,無任何錯誤</b></td><td>計算節點做 <code>0/0</code> 得 NaN;過濾器用 <code>&lt;0 || &gt;2</code> 判斷,<b>對 NaN 永遠是 false 擋不住</b> → InfluxDB 拒收整批;全域 0 個 catch 節點故完全靜默</td><td>改用 <code>Number.isFinite()</code> 把關;停機時不再寫 0(那是謊言,會稀釋下游平均),改寫三態 SYSTEM_STATUS;新增 catch 節點</td></tr>
+  <tr><td class="date">2026-07-14</td><td>降採樣永遠慢一天</td><td>task 裡的 <code>now()</code> 是<b>排程時間</b>不是觸發時間,<code>offset</code> 只延後執行、不移動 now()</td><td>修 day_start/day_stop;補寫被跳過的日期</td></tr>
+  <tr><td class="date">2026-07-30</td><td>變頻器離線後仍寫舊值</td><td>無資料年齡防護</td><td><code>fix_vfd_staleness.py</code>;Danfoss FC03 <b>不能整塊讀</b>(一次只回一個參數、多要的補零)之四條規則寫成實測表</td></tr>
+  <tr><td class="date">2026-07-31</td><td><b>hvac_daily 連兩天 0 筆,執行狀態卻回報 success</b></td><td>控制器重開機讓 InfluxDB 把 <code>latestCompleted</code> 蓋成啟動當下 → task 跳過一天</td><td>自癒腳本 + 每日 01:00 檢查缺日自動補;🔴 不可在 UI 手動按 Run(會寫出還沒過完的當天半天值)</td></tr>
+  <tr><td class="date">2026-08-01</td><td>啟動暫態 TypeError 12 筆</td><td>重啟瞬間 payload 尚未成形</td><td>30 個函式節點加防護,零停機部署;完整重啟實測 TypeError = 0</td></tr></table></div>
+  <p style="font-size:13.5px"><b>共通教訓</b>:這五件全部<b>不會報錯</b>——回報成功、日誌乾淨、面板照畫。<b>驗證要看行為,不能看回應</b>(部署標頭寫錯時 curl 不會報錯,只會安靜地退回完整重啟);<b>回讀驗證要驗「對應」不是驗「字串存在」</b>(冷卻水塔 2L/2R 標籤曾貼反,字串檢查照樣通過);<b>凡是機械可偵測的就不要靠眼睛</b>(自動檢查工具上線當天就掃出現行版報告有 11 處粗體跨行,含最重要的結論框,是逐頁校對沒抓到的)。</p></div></details>
+  <details><summary>儀表板與面板</summary><div class="inner">
+  <ul class="tight" style="font-size:13.5px">
+  <li><b>MainPage</b>:panel 150 資料儲存餘裕(最上方)、panel 116 系統總覽(可縮放 ECharts,含設備運轉動畫與半透明資訊卡)、panel 117 冰機組運作狀態、panel 119/120/122 系統能效 KPI 與今日 vs 基準日、近 30 天、panel 124~129 水側維運健康度/冰水溫差/趨近溫度/流量×溫差散布/水溫全景/近 30 天劣化。</li>
+  <li><b>Electricity Information</b>:panel 132~137 電力總覽 KPI、總功率需量、近 7 天每日用電、電壓不平衡、壓縮機電氣;panel 141~147 碳排(今日/本月累計/碳費估算/等效換算/近 30 天/今日分項/年度累計)。</li>
+  <li><b>Other System Energy Efficiency</b>:系統壓差與 AR-200 振動、冷卻水回水溫度與冰機跳機預警。</li>
+  <li><b>HVAC 數位孿生</b>(獨立頁):Blender → ID 化 SVG → mapping.json → 動畫引擎的分層框架,<b>換場域只換底圖與 mapping</b>,為公司可複用的標準化平台。</li>
+  <li>各面板的 Flux 查詢已鏡像於 <span class="kbd">11_…\\附件\\Flux查詢\\</span>(28 支)——<b>想知道某個數字到底怎麼算出來的,看這裡最快</b>;面板樣貌見 <span class="kbd">附件\\面板截圖\\</span>(22 張)。</li></ul></div></details>
+  <details><summary>筆記庫鏡像了什麼、沒鏡像什麼</summary><div class="inner">
+  <div class="tblwrap"><table><tr><th style="width:200px">鏡像位置</th><th>內容</th></tr>
+  <tr><td><code>01_任務紀錄\\</code></td><td>27 份調適紀錄(儀表板與面板 5 · 數位孿生 2 · 資料鏈 6 · 基礎設施 7 · 分析與交付 7)。🔑 接手先讀《任務紀錄_Sankey電力流向_20260709》第零部分「現況總覽」;⚠ 該檔按時間長出來,<b>後面章節會推翻前面</b>,以最新更新區塊為準</td></tr>
+  <tr><td><code>02_交付文件\\</code></td><td>現行版 7 份 md 內容正本(EDU-001 無 md)</td></tr>
+  <tr><td><code>03_技術參考\\</code></td><td>工作區總說明、交付文件版次索引、<b>Danfoss Modbus 位址實測表</b>(位址/位元寬度/縮放的唯一真相)、離線建模交付包說明</td></tr>
+  <tr><td><code>附件\\</code></td><td>交付成品 17 檔(docx/pdf/pptx)· Flux 查詢 28 支 · 面板截圖 22 張</td></tr>
+  <tr style="background:#FBF1E6"><td><b>未鏡像</b></td><td><code>.secrets\\</code>、<code>.env</code>、私鑰(等同 root 密碼)· 面板碼與部署腳本、Node-RED flows、數位孿生框架(<b>唯一真相在工作區</b>)· backup 快照、分析 CSV、9 MB 級 .blend · 已被取代的舊版文件 · 除錯截圖</td></tr></table></div></div></details>
+  <details><summary>未決事項與待辦</summary><div class="inner"><ul class="tight" style="font-size:13.5px">
+  <li>🔴 <b>InfluxDB 落在 SSD 的兩週驗證期至 2026-08-10</b>——每次開工需驗一次 shard 路徑;eMMC 上的舊資料刻意保留作回滾保險,驗證期滿確認無誤後才刪。</li>
+  <li><b>7 台變頻器僅 2 台通電</b>(CT-02 / CT-03)——其餘 5 台的運轉值目前取不到,影響泵浦變頻節能之實測驗證。</li>
+  <li>約 2026-08-15 應以實測分布重訂記憶體告警門檻(首版 12% 為保守值),並回頭看 <code>HWM_*</code> 有沒有在爬——那才是「有沒有慢性洩漏」的正式答案。</li>
+  <li>EDU-001 Rev.1.5 新增章節<b>尚無面板截圖</b>(該機未裝 image renderer 外掛,i.MX8M Mini 不適合為此安裝);需人工截圖後補入。</li>
+  <li>離線建模(強化學習)資料已抓完並雙邊驗證,<b>合併寬表與灰箱擬合尚未開始</b>。</li>
+  <li>冷卻水塔運轉模式<b>不是自然實驗</b>——現有資料無法用來比較兩種模式(唯一乾淨窗口除外);要做因果推論須依 OPS-001 執行輪替試驗。</li>
+  <li>可與工程案接軌者:以 <code>hvac_daily</code> 產出<b>連續運轉數據報表</b>補 <a href="#s06">階段 06</a> 6-7;以報告期數據推進 <a href="#s08">階段 08</a> 8-2 <b>M&V</b>(套 <a href="#baseline">模型 B</a> 雙軌算法、對照合約 30% 標的)。</li></ul></div></details>
+  <div class="foot">資料正本:工作區 <span class="kbd">E:\\Tool_By_AI\\Claude\\ICPDAS_F1_HVAC_Grafana_NoedRed</span>(唯一真相)· 筆記庫鏡像 <span class="kbd">11_監控系統_Grafana與NodeRED</span>(2026-08-02,110 檔)· 同步:<span class="kbd">_同步_從工作區更新.ps1</span></div>`;
+}
+
 /* ---- render ---- */
 function route(){const h=location.hash.replace("#","")||"overview";return NAVDEF.some(n=>n[0]===h)?h:"overview";}
 function render(){
@@ -687,6 +773,7 @@ function render(){
   else if(r==="help")html=vHelp();
   else if(r==="partners")html=vPartners();
   else if(r==="baseline")html=vBaseline();
+  else if(r==="monitor")html=vMonitor();
   else html=vStage(STAGES.find(s=>"s"+s.id===r));
   $("#app").innerHTML=html;
 }
